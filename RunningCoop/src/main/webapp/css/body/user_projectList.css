@@ -1,0 +1,110 @@
+.projectTable{
+	width: 95%;
+    height: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.projectTable th, td {
+    height: 25px;
+    text-align: center;
+}
+
+.projectTable tr:HOVER {
+    background-color: #F8F8F8;
+    cursor: pointer;
+}
+
+#div_select_area{
+	text-align: right;
+}
+
+.project_list_select{
+	width: 100px;
+    height: 30px;
+    margin-right: 25px;
+    font-size: 12pt;
+    background: #5cb85c;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 1px 5px;
+}
+
+#group_project_list{
+	width: 95%;
+    margin: 0 auto;
+    overflow: auto;
+}
+
+#individual_project_list{
+	width: 95%;
+    margin: 0 auto;
+    overflow: auto;
+}
+
+.pagenum_div{
+    text-align: center;
+}
+
+.pagination{
+	width: 100%;
+    max-width: 350px;
+    display: block;
+    list-style: none;
+    padding-left: 0;
+    position: relative;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+.pagination>li:first-child>a, .pagination>li:first-child>span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.pagination>li>a, .pagination>li>span {
+	position: relative;
+    float: left;
+    padding: 2px 12px;
+    margin-left: -1px;
+    margin-right: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    font-size: 11pt;
+}
+
+.pr_search_area {
+    float: left;
+    margin-left: 45px;
+}
+
+.pr_search_area	input[type=text]{
+	width: 200px;
+    height: 20px;
+    font-size: 12pt;
+    vertical-align: middle;
+}
+
+.pr_search_btn{
+	color: white;
+    padding: 1px 10px;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    margin-left: 10px;
+}
+
+.pr_search_btn:HOVER {
+	box-shadow : 1px 1px 5px #C8C8C8;
+}

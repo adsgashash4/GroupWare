@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pm.rc.groupMapper">
+
+	<resultMap type="MemberDto" id="memDTO">
+		<result property="mem_name" column="MEM_NAME" />
+		<result property="groupwaitdto.wait_regDate" column="WAIT_REGDATE" />
+	</resultMap>
+	
+	<resultMap type="GroupDto" id="groupdto2">
+		<result property="gr_id" column="GR_ID"/>
+		<result property="gr_name" column="GR_NAME"/>
+		<result property="gr_regDate" column="GR_REGDATE"/>
+		<result property="gr_joinYN" column="GR_JOINYN"/>
+	</resultMap>
+
+	<select id="myGrSelect" parameterType="java.util.Map" resultType="GroupDto">
+		SELECT G.GR_ID , G.GR_NAME,G.GR_GOAL,TO_CHAR(G.GR_REGDATE, 'YYYY/MM/DD'),G.GR_IMG,G.GR_REGDATE FROM RC_GROUP G
+		WHERE G.GR_ID IN
+		(SELECT GR_ID FROM RC_GROUPMEM WHERE MEM_ID IN #{mem_id})
+		AND G.GR_DELYN = 'N' AND G.GR_APPYN = 'Y'
+	</select>
+	
+	<select id="waitGrSelect" parameterType="java.util.Map" resultType="GroupDto">
+		SELECT G.GR_ID , G.GR_NAME,G.GR_GOAL,TO_CHAR(G.GR_REGDATE, 'YYYY/MM/DD'),G.GR_IMG,G.GR_REGDATE FROM RC_GROUP G
+		WHERE G.GR_ID IN
+		(SELECT GR_ID FROM RC_GROUPMEM WHERE MEM_ID IN #{mem_id})
+		AND G.GR_DELYN = 'N' AND G.GR_APPYN = 'N'
+	</select>
+
+	<select id="grDetailSelect" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT G.GR_ID, G.GR_NAME, M.MEM_NAME, G.GR_MEMCNT, G.GR_IMG, G.GR_GOAL,
+				TO_CHAR(G.GR_REGDATE, 'YYYY/MM/DD') GR_REGDATE, G.GR_SEARCHYN, G.GR_JOINYN
+		FROM RC_GROUP G, RC_MEMBER M
+		WHERE G.GR_ID = #{gr_id} 
+			AND M.MEM_ID = (SELECT GM.MEM_ID FROM RC_GROUPMEM GM WHERE GM.GR_ID = G.GR_ID AND GM.GR_LEVEL = 'GM')
+	</select>
+
+
+	<update id="grModify" parameterType="java.util.Map">
+		UPDATE RC_GROUP SET GR_GOAL = #{gr_goal}, GR_SEARCHYN = #{gr_searchyn}, GR_JOINYN = #{gr_joinyn}, GR_IMG = #{gr_img}
+		WHERE GR_ID = #{gr_id}
+	</update>
+
+	<select id="allGrSelect" parameterType="java.util.Map" resultMap="groupdto2">
+		SELECT 	G.GR_ID, G.GR_NAME, M.MEM_NAME
+		FROM 	RC_GROUP G, RC_MEMBER M
+		WHERE 	M.MEM_ID IN (
+							SELECT 	GM.MEM_ID 
+							FROM 	RC_GROUPMEM GM
+							WHERE 	GM.GR_ID = G.GR_ID 
+									AND GM.GR_LEVEL = 'GM'
+						   )
+		AND G.GR_DELYN = 'N'
+		AND G.GR_NAME LIKE #{gr_name} ||'%'
+	</select>
+
+	<select id="grMemSelect" parameterType="java.lang.String" resultType="MemberDto">
+		SELECT M.MEM_ID, M.MEM_NAME, GM.GR_LEVEL
+		FROM RC_MEMBER M, RC_GROUPMEM GM
+		WHERE M.MEM_ID = GM.MEM_ID
+		AND GM.GR_LEVEL = 'GIM'
+		AND M.MEM_DELYN = 'N'
+		AND GM.GR_ID = #{gr_id}
+	</select>
+
+	<delete id="grMemDelete1" parameterType="java.util.Map">
+		DELETE FROM RC_GROUPMEM
+		WHERE MEM_ID = #{mem_id} AND GR_ID = #{gr_id} AND
+		GR_LEVEL = 'GIM'
+	</delete>
+
+	<update id="grMemDelete2" parameterType="java.util.Map">
+		UPDATE RC_GROUP SET
+		GR_MEMCNT =
+		(SELECT COUNT (*) FROM RC_GROUPMEM WHERE GR_ID = #{gr_id})
+		WHERE GR_ID = #{gr_id}
+	</update>
+
+	<insert id="grWaitInsert" parameterType="java.util.Map">
+		INSERT INTO RC_GRWAIT
+		(WAIT_SEQ, MEM_ID, GR_ID, WAIT_CONTENT)
+		VALUES
+		(GRWAIT_SEQ.NEXTVAL,
+		#{mem_id}, #{gr_id}, #{wait_content})
+	</insert>
+
+	<select id="grWaitList" parameterType="java.lang.String" resultMap="memDTO">
+		SELECT M.MEM_NAME mem_name, TO_CHAR(GW.WAIT_REGDATE, 'YYYY/MM/DD') wait_regDate, M.MEM_ID
+		FROM RC_MEMBER M, RC_GRWAIT GW
+		WHERE GW.GR_ID = #{gr_id} 
+			AND M.MEM_ID = GW.MEM_ID AND M.MEM_DELYN ='N'
+	</select>
+
+	<insert id="grMemInsert1" parameterType="java.util.Map">
+		INSERT INTO RC_GROUPMEM (GR_ID, MEM_ID)
+		VALUES (#{gr_id}, #{mem_id})
+	</insert>
+
+	<delete id="grMemInsert2" parameterType="java.util.Map">
+		DELETE FROM RC_GRWAIT WHERE GR_ID = #{gr_id} AND MEM_ID = #{mem_id}
+	</delete>
+
+	<update id="grMemInsert3" parameterType="java.util.Map">
+		UPDATE RC_GROUP SET GR_MEMCNT =
+			(SELECT COUNT (*) FROM RC_GROUPMEM WHERE GR_ID = #{gr_id})
+			WHERE GR_ID = #{gr_id}
+	</update>
+	
+	<delete id="grMemReject" parameterType="java.util.Map">
+		DELETE FROM RC_GRWAIT WHERE GR_ID = #{gr_id} AND MEM_ID = #{mem_id}
+	</delete>
+	
+	<insert id="grInsert1" parameterType="java.util.Map" >
+	INSERT INTO RC_GROUP (GR_ID, GR_NAME, GR_GOAL,GR_IMG,GR_SEARCHYN,GR_JOINYN)
+		VALUES
+		(#{gr_id}, #{gr_name}, #{gr_goal}, #{gr_img}, #{gr_searchyn}, #{gr_joinyn})
+	</insert>
+
+	<insert id="grInsert2" parameterType="java.util.Map">
+	INSERT INTO RC_GROUPMEM (GR_ID, MEM_ID, GR_LEVEL)
+		VALUES
+	(#{gr_id}, #{mem_id}, 'GM')
+	</insert>
+	
+	
+	<select id="allGroupSearchSelect" parameterType="GroupDto" resultType="java.util.Map">
+		SELECT * FROM 
+			(SELECT ROWNUM RNUM, P.* FROM
+				(SELECT G.GR_ID, G.GR_NAME, M.MEM_NAME, TO_CHAR(G.GR_REGDATE, 'YYYY/MM/DD') GR_REGDATE, G.GR_JOINYN
+					FROM RC_GROUP G, RC_MEMBER M 
+					WHERE M.MEM_ID IN (SELECT GM.MEM_ID FROM RC_GROUPMEM GM WHERE GM.GR_ID = G.GR_ID AND GM.GR_LEVEL = 'GM')
+					AND G.GR_NAME LIKE '%${gr_name}%'
+					AND G.GR_SEARCHYN = 'Y'
+					AND G.GR_DELYN = 'N'
+					ORDER BY G.GR_REGDATE DESC
+		      ) P
+		    )	
+		WHERE RNUM BETWEEN #{paging.start} AND #{paging.last}
+	</select>
+	<!-- 2. Total Query -->
+	<select id="allGroupSearchSelectCount" resultType="java.lang.Integer" parameterType="GroupDto">
+		SELECT NVL(COUNT(*),0)
+		FROM RC_GROUP G, RC_MEMBER M
+		WHERE M.MEM_ID IN (SELECT GM.MEM_ID FROM RC_GROUPMEM GM WHERE GM.GR_ID = G.GR_ID AND GM.GR_LEVEL = 'GM') AND G.GR_NAME LIKE '%${gr_name}%'
+	</select>
+	
+<!-- 	그룹삭제 시작 -->
+
+<!-- 1 프로젝트관련  1_1. 팀 일정 삭제 -->
+	<update id="grProSueDelete" parameterType="java.lang.String">
+	UPDATE RC_SCHEDULE SET SCH_DELYN = 'Y' WHERE PR_ID IN (SELECT PR_ID FROM RC_GRPRO WHERE GR_ID = #{gr_id})
+	</update>
+<!--  1-2 프로젝트 첨부파일 삭제 -->
+	<delete id="grProAttDelete" parameterType="java.lang.String">
+	DELETE FROM RC_GNPATTACH
+	WHERE WK_ID IN (SELECT WK_ID FROM RC_WORKLIST WHERE PR_ID IN (SELECT PR_ID FROM RC_GRPRO WHERE GR_ID = #{gr_id}))	
+	</delete>
+<!--  1-3 프로젝트 하위 업무 삭제 -->
+	<update id="grProWorkDetailDelete" parameterType="java.lang.String">
+	UPDATE RC_WORKDETAIL SET WD_DELYN = 'Y'  where wk_id in 
+	(SELECT WK_ID FROM RC_WORKLIST WHERE PR_ID IN (SELECT PR_ID FROM RC_GRPRO WHERE GR_ID = #{gr_id}))
+	</update>
+<!--  1-4 프로젝트 업무 코멘트 삭제 -->
+	<update id="grProWorkCommDelete" parameterType="java.lang.String">
+	UPDATE RC_WORKCOMMENT SET WCOM_DELYN = 'Y' where wk_id in
+	(SELECT WK_ID FROM RC_WORKLIST WHERE PR_ID IN (SELECT PR_ID FROM RC_GRPRO WHERE GR_ID = #{gr_id}))
+	</update>
+<!--  1-5 프로젝트 업무 삭제 -->
+	<update id="grProWorkListDelete" parameterType="java.lang.String">
+	UPDATE RC_WORKLIST SET WK_DELYN = 'Y'
+	WHERE PR_ID IN(SELECT PR_ID FROM RC_GRPRO WHERE GR_ID = #{gr_id})
+	</update>
+<!--  1-6 프로젝트 멤버 삭제 -->
+	<delete id="grProMemDelete" parameterType="java.lang.String">
+	DELETE FROM RC_PROMEM WHERE PR_ID IN (SELECT PR_ID FROM RC_GRPRO WHERE GR_ID = #{gr_id})
+	</delete>
+<!--  1-7 프로젝트 인원 업데이트 비활성화 -->
+	<update id="grProAllDelete" parameterType="java.lang.String">
+	UPDATE RC_PROJECT SET PR_MEMCNT = 0, PR_DELYN = 'Y'
+	WHERE PR_ID IN (SELECT PR_ID FROM RC_GRPRO WHERE GR_ID = #{gr_id})
+	</update>
+<!-- 2. 게시판관련  2-1 그룹 게시판 첨부파일 삭제 -->
+	<delete id="grBoardAttDelete" parameterType="java.lang.String">
+	DELETE FROM RC_GNPATTACH
+	WHERE BR_UUID IN (SELECT BR_UUID FROM RC_GRBOARD WHERE GR_ID = #{gr_id})
+	</delete>
+<!--  2-2 그룹 게시판 코멘트 삭제 -->
+	<delete id="grBoardCommDelete" parameterType="java.lang.String">
+  	UPDATE RC_GRBOARD SET BR_COMYN= 'Y'
+  	WHERE BR_UUID IN (SELECT BR_UUID FROM RC_GRBOARD WHERE GR_ID = #{gr_id})
+	</delete>
+<!--  2-3 그룹 게시글 삭제 -->
+	<update id="grBoardDelete" parameterType="java.lang.String">
+	UPDATE RC_GRBOARD SET BR_DELYN = 'Y'
+	WHERE BR_UUID IN (SELECT BR_UUID FROM RC_GRBOARD WHERE GR_ID = #{gr_id})
+	</update>
+<!-- 2-4 그룹 가입신청 리스트 삭제 -->
+	<delete id="grJoinListDelete" parameterType="java.lang.String">
+	DELETE FROM RC_GRWAIT WHERE GR_ID = #{gr_id}
+	</delete>
+<!-- 2-5 그룹 멤버 삭제 -->
+	<delete id="grMemDelete" parameterType="java.lang.String">
+  	DELETE FROM RC_GROUPMEM WHERE GR_ID = #{gr_id} AND GR_LEVEL = 'GIM'
+	</delete>
+<!-- 2-6 그룹 인원 업데이트 및 비활성화 -->
+	<update id="grMemCountDelete" parameterType="java.lang.String">
+	UPDATE RC_GROUP SET GR_MEMCNT = 0 , GR_DELYN = 'Y' WHERE GR_ID = #{gr_id}
+	</update>
+	
+<!-- 	그룹관리자 신규관리자로 업데이트	 -->
+	<update id="newGrMgChange" parameterType="java.util.Map">
+	UPDATE RC_GROUPMEM SET GR_LEVEL = 'GM' WHERE MEM_ID = #{mem_id} AND GR_ID = #{gr_id}
+	</update>
+	
+<!-- 	그룹관리자 예전관리자 업데이트 -->
+	<update id="oldGrMaChange" parameterType="java.util.Map">
+	UPDATE RC_GROUPMEM SET GR_LEVEL = 'GIM' WHERE MEM_ID = #{mem_id} AND GR_ID = #{gr_id}
+	</update>
+	
+<!-- 	그룹가입신청 시 중복가입 확인 -->
+	<select id="grCheck" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT count(MEM_ID) 
+		FROM RC_GROUPMEM 
+		WHERE MEM_ID = #{mem_id}
+		AND GR_ID = #{gr_id} 
+	</select>
+	
+<!-- 	그룹생성시 그룹이름 중복체크 확인 -->
+	<select id="grNameCheck" parameterType="java.lang.String" resultType="java.lang.Integer">
+	SELECT COUNT(GR_NAME) FROM RC_GROUP
+	WHERE GR_NAME = #{gr_name}
+	</select>
+	
+<!-- 	그룹게시판 목록 출력 -->
+	<select id="grBoradList" parameterType="GroupBoardDto" resultType="java.util.Map">
+		SELECT * FROM 
+			(SELECT ROWNUM RNUMBER, R.* FROM (
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT BR.BR_UUID, BR.BR_TITLE, M.MEM_NAME, TO_CHAR(BR.BR_REGDATE, 'YYYY/MM/DD') BR_REGDATE, BR.BR_NOTICEYN
+						FROM RC_GRBOARD BR, RC_MEMBER M
+						WHERE GR_ID = #{gr_id} AND BR.MEM_ID = M.MEM_ID AND BR.BR_DELYN = 'N'	
+						<if test="br_title != null">
+							AND BR.BR_TITLE LIKE '%${br_title}%'
+						</if>
+						ORDER BY BR_REFER, BR_REGDATE DESC
+				  	) P
+				ORDER BY RNUM DESC) R)
+			)
+		WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}
+	</select>
+	
+	<select id="grBoradListCnt" resultType="java.lang.Integer" parameterType="GroupBoardDto">
+		SELECT NVL(COUNT(*),0)
+		FROM RC_GRBOARD BR, RC_MEMBER M
+		WHERE GR_ID = #{gr_id} AND BR.MEM_ID = M.MEM_ID AND BR.BR_DELYN = 'N'
+		<if test="br_title != null">
+			AND BR.BR_TITLE LIKE '%${br_title}%'
+		</if>	
+	</select>
+	
+<!-- 	그룹선택시 이미지 값 출력 -->
+	<select id="groupImg" parameterType="java.lang.String" resultType="java.lang.Integer">
+	SELECT GR_IMG FROM RC_GROUP WHERE GR_ID = #{gr_id}
+	</select>
+	
+	<select id="groupManagerSearch" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT GR_LEVEL FROM RC_GROUPMEM WHERE GR_ID = #{gr_id} AND MEM_ID = #{ mem_id }
+	</select>
+	
+<!-- 	그룹게시판 게시글 등록 -->
+	<insert id="grBoardInsert" parameterType="java.util.Map">
+	INSERT INTO RC_GRBOARD
+	(BR_UUID, MEM_ID, BR_TITLE, BR_CONTENT, BR_NOTICEYN , GR_ID, BR_REFER, BR_REGDATE)
+	VALUES (#{br_uuid},#{mem_id},#{br_title},#{br_content},'N',#{gr_id},
+	(SELECT NVL(MAX(BR_REFER)+1, 1) FROM RC_GRBOARD),SYSDATE)
+	</insert>
+<!-- 	그룹게시판 게시글 조화 -->	
+	<select id="grBoardViewSelect" parameterType="java.lang.String" resultType="java.util.Map">
+	SELECT GB.BR_UUID, GB.MEM_ID, M.MEM_NAME, TO_CHAR(GB.BR_REGDATE,
+	'YYYY/MM/DD')BR_REGDATE, GB.BR_TITLE, GB.BR_CONTENT, GB.BR_REFER
+	FROM RC_GRBOARD GB, RC_MEMBER M
+	WHERE M.MEM_ID = GB.MEM_ID AND
+	BR_UUID = #{br_uuid}
+	</select>
+	
+<!-- 	그룹탈퇴 시작 -->
+<!-- 	게시글 삭제 -->
+	<update id="grBoardViewSelect2">
+	UPDATE RC_GRBOARD SET BR_DELYN = 'Y'
+	WHERE MEM_ID = #{mem_id}
+	</update>
+<!-- 	그룹멤버 조정 -->
+	<update id="grBoardViewSelect3">
+	UPDATE RC_GROUP SET GR_MEMCNT =  GR_MEMCNT-1 WHERE GR_ID = #{gr_id}
+	</update>
+	
+<!-- 접속중인 그룹명 출력 -->
+	<select id="sessionGrSelect" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT GR_NAME FROM RC_GROUP WHERE GR_ID = #{gr_id}
+	</select>	
+</mapper>

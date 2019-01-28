@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 2. Dispatcher로 패키지 탐색 범위 설정 -->
+	<context:component-scan base-package="com.pm.rc" />
+	<!-- 3. annotation으로 Controller탐색 -->
+	<mvc:annotation-driven />
+	<!-- intercepter설정(controller실행 전이나 후에 실행 될 intercepter 로직 class 지정 -->
+	 <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/*.do"/>
+			<mvc:exclude-mapping path="/loginAfter.do"/>
+			<mvc:exclude-mapping path="/main.do"/> 
+			<mvc:exclude-mapping path="/memIdSelect.do"/>
+			<mvc:exclude-mapping path="/memEmailSelect.do"/>
+			<mvc:exclude-mapping path="/ckLogin.do"/>
+			<mvc:exclude-mapping path="/enterMgr.do"/>
+			<mvc:exclude-mapping path="/searchAccount.do"/>
+			<mvc:exclude-mapping path="/searchId.do"/>
+			<mvc:exclude-mapping path="/searchPw.do"/>
+			<mvc:exclude-mapping path="/pwMailSending.do"/>
+			<mvc:exclude-mapping path="/resultPw.do"/>
+			<mvc:exclude-mapping path="/goJoin.do"/>
+			<mvc:exclude-mapping path="/autoauto.do"/>
+			<mvc:exclude-mapping path="/allGrSelect.do"/>
+			<mvc:exclude-mapping path="/chkJoin.do"/>
+			<mvc:exclude-mapping path="/ckIdentifyMem.do"/>
+			<mvc:exclude-mapping path="/joinMailSending.do"/>
+			<mvc:exclude-mapping path="/ckIdentifyNum.do"/>
+			<mvc:exclude-mapping path="/WEB-INF/views/account/joinAfter.jsp"/>
+			<mvc:exclude-mapping path="/WEB-INF/views/account/error/error.jsp"/>
+			<mvc:exclude-mapping path="/groupGoGo.do"/>
+			<mvc:exclude-mapping path="/rcAdmin.do"/>
+			<mvc:exclude-mapping path="/socketOpen.do"/>
+			<mvc:exclude-mapping path="/adminLogin.do"/>
+			<bean class="com.pm.rc.interceptor.LoginCheckInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors> 
+
+	<!-- 9. 화면 resolver 설정 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- MultipartResolver 설정 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000" />
+        <property name="maxInMemorySize" value="100000000" />
+    </bean>
+    
+    <websocket:handlers>
+		<websocket:mapping handler="wsChat.do" path="/wsChat.do"/>
+		<websocket:handshake-interceptors>
+			<bean class = "org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"></bean>
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+	
+	<context:component-scan base-package="com.pm.rc"/>
+
+</beans>

@@ -1,0 +1,181 @@
+.pr_list{
+	width : 200px;
+	height : 300px;
+	background: white;
+	border : 2px solid lightgrey;
+	margin : 15px;
+	float: left;
+}
+
+.pr_list:HOVER{
+	box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.3);
+	cursor : pointer;
+}
+
+.canvasjs-chart-canvas:HOVER{
+	cursor : pointer;
+}
+
+.project_list_view{
+	width : 100%;
+	padding : 10px;
+	padding-left: 25px;
+}
+
+.pr_create{
+    padding: 5px 30px;
+    margin-bottom: 10px;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+	color: #fff;
+    font-size : 20pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.pr_create:HOVER {
+	box-shadow : 1px 1px 5px #C8C8C8;
+}
+
+.go_iProject_select{
+	padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    color: #fff;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    position: absolute;
+    right: 10px;
+}
+
+.go_iProject_select:HOVER {
+	box-shadow : 1px 1px 5px #C8C8C8;
+}
+
+.pr_detail_view{
+	width : 500px;
+	height : 400px;
+	background : white;
+	border : 1px dotted green;
+	display : none;
+}
+
+.pr_detail {
+    vertical-align: middle;
+    width: 20px;
+    margin-right: 3px;
+}
+
+.pr_detail:HOVER {
+	opacity : 0.5;
+}
+
+.gPr_leave {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.gPr_leave:HOVER{
+	opacity : 0.5;
+}
+
+.pr_btn {
+    width: 100%;
+    text-align: right;
+}
+.info_div {
+	height : 10%
+}
+
+.rate_div {
+	height: 60%;
+    margin-top: 10px;
+}
+
+.pr_rate {
+	width : 100%;
+	height : 100%;
+	background : none;
+}
+
+.date_div {
+	height: 15%;
+    text-align: right;
+    line-height: 100%;
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+.name_div {
+	margin: 0 auto;
+    border-bottom: 0.5px solid lightgrey;
+    width: 90%;
+    height: 15%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.name_div span {
+	line-height: 100%;
+	font-size: 13pt;
+}
+
+#create_Form{
+	display : none;
+	text-align: center;
+}
+
+#create_Form table{
+	margin : 0 auto;
+	margin-top : 30px;
+	margin-bottom : 20px;
+	width : 450px;
+	text-align : left;
+	border-collapse: collapse;
+}
+
+#create_Form tr {
+	border-top : 1px solid lightgrey;
+	border-bottom : 1px solid lightgrey;
+}
+
+#create_Form th, td {
+	padding : 5px 5px;
+}
+
+.create_btn{
+	color : white;
+	padding: 2px 5px;
+    margin-bottom: 5px;
+	background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size : 20pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.create_btn:HOVER{
+	box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.3);
+}
+
+.pr_detail_table{
+	width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.pr_detail_table th,tr,td {
+	padding : 5px;
+	border-top : 1px solid grey;
+	border-bottom : 1px solid grey;
+}
+
+.pr_detail_table th {
+	width : 30%;
+	background-color: #D8D8D8;
+}

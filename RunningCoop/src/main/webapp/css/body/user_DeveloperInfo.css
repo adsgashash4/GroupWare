@@ -1,0 +1,8 @@
+.devel_img_div {
+    width: 100%;
+    height: 80%;
+    background-image: url(../../images/developer.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}

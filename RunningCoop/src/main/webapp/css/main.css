@@ -1,0 +1,67 @@
+@import url(header/user_header.css);
+@import url(header/sys_header.css);
+@import url(footer/user_footer.css);
+@import url(footer/sys_footer.css);
+@import url(body/user_body.css);
+@import url(body/sys_body.css);
+
+ @media screen and (max-width: 1000px){
+ 	.work_Detail_Insert span {
+ 		font-size: 10pt;
+    	margin-left: 1px;
+ 	}
+ 	
+ 	.work_Detail_Insert input {
+ 		margin-right: 1px;
+ 		margin-left: 1px;
+ 	}
+ 	
+ 	.wd_insert_btn {
+	    color: white;
+    	padding: 0.5px 3px;
+    	background-color: #5cb85c;
+    	border-color: #4cae4c;
+    	font-size: 10pt;
+    	font-weight: bold;
+    	border: 1px solid transparent;
+    	border-radius: 2px;
+ 	}
+ }
+
+ @media screen and (max-width: 800px) {
+	.top_menu {
+		margin-left:5px;
+    	font-size: 13pt;
+    	letter-spacing: -1px;
+    }
+	
+	.bottom-menu {
+    	width: 100%;
+    	margin-bottom: 10px;
+    	margin-left: 10px;
+	}
+	
+	.menu_logo span {
+    	font-size: 13pt;
+    	letter-spacing: -1px;
+    	margin-left: 5px;
+	}
+	
+	.iProject{
+		letter-spacing:-1px;
+		font_size: 8pt;
+	}
+	
+	.pr_create{
+		padding: 2px 15px;
+		margin-top: 40px;
+    	margin-bottom: 10px;
+    	background-color: #5cb85c;
+    	border-color: #4cae4c;
+		color: #fff;
+    	font-size : 15pt;
+    	font-weight: bold;
+    	border: 1px solid transparent;
+    	border-radius: 5px;
+	}
+}

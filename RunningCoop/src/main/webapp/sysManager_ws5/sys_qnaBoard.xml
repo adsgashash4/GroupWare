@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:w2="http://www.inswave.com/websquare"
+		xmlns:xf="http://www.w3.org/2002/xforms">
+		<head>
+			<w2:type>DEFAULT</w2:type>
+			<w2:buildDate />
+			<xf:model ev:submitdone="scwin.sub_PostSearch_submitdone">
+				<xf:instance>
+					<data xmlns="" />
+				</xf:instance>
+				<w2:dataCollection baseNode="map">
+					<w2:dataList baseNode="list" repeatNode="map"
+						id="dc_qnaPostList" saveRemovedData="true">
+						<w2:columnInfo>
+							<w2:column id="RNUM" name="번호"
+								dataType="number">
+							</w2:column>
+							<w2:column id="SBR_UUID" name="게시글번호"
+								dataType="text">
+							</w2:column>
+							<w2:column id="SBR_TITLE" name="게시글제목"
+								dataType="text">
+							</w2:column>
+							<w2:column id="MEM_NAME" name="작성자"
+								dataType="text">
+							</w2:column>
+							<w2:column id="SBR_REGDATE" name="작성일"
+								dataType="text">
+							</w2:column>
+						</w2:columnInfo>
+					</w2:dataList>
+					<w2:dataMap baseNode="map" id="dc_qnaSearchParam">
+						<w2:keyInfo>
+							<w2:key id="SBR_TITLE" name="게시글제목"
+								dataType="text">
+							</w2:key>
+							<w2:key id="index" name="페이지번호"
+								dataType="text">
+							</w2:key>
+							<w2:key id="pageCnt" name="페이지수"
+								dataType="text">
+							</w2:key>
+							<w2:key id="listCnt" name="게시글 수"
+								dataType="text">
+							</w2:key>
+							<w2:key id="pageStartNum" name="시작게시글번호"
+								dataType="text">
+							</w2:key>
+						</w2:keyInfo>
+						<w2:data use="true">
+							<SBR_TITLE></SBR_TITLE>
+							<index><![CDATA[0]]></index>
+							<pageCnt></pageCnt>
+							<listCnt><![CDATA[]]></listCnt>
+							<pageStartNum><![CDATA[1]]></pageStartNum>
+						</w2:data>
+					</w2:dataMap>
+					<w2:dataMap baseNode="map" id="dc_PagingInfo">
+						<w2:keyInfo>
+							<w2:key id="listCnt" name="name1"
+								dataType="text">
+							</w2:key>
+							<w2:key id="pageCnt" name="name2"
+								dataType="text">
+							</w2:key>
+							<w2:key id="pageStartNum" name="name3"
+								dataType="text">
+							</w2:key>
+							<w2:key id="index" name="name4"
+								dataType="text">
+							</w2:key>
+							<w2:key id="total" name="name5"
+								dataType="text">
+							</w2:key>
+							<w2:key id="pageLastNum" name="name6"
+								dataType="text">
+							</w2:key>
+							<w2:key id="start" name="name7"
+								dataType="text">
+							</w2:key>
+							<w2:key id="last" name="name8"
+								dataType="text">
+							</w2:key>
+						</w2:keyInfo>
+					</w2:dataMap>
+				</w2:dataCollection>
+				<w2:workflowCollection></w2:workflowCollection>
+				<xf:submission id="sub_PostListSelect"
+					ref="data:json,dc_qnaSearchParam"
+					target='data:json,[{"id":"dc_qnaPostList","key":"result1"},{"id":"dc_PagingInfo","key":"result2"}]'
+					action="/RunningCoop/sysQnaMgr.do" method="post"
+					mediatype="application/json" encoding="UTF-8" instance=""
+					replace="" errorHandler="" customHandler="" mode="asynchronous"
+					processMsg="데이터로딩중..." ev:submit=""
+					ev:submitdone="scwin.sub_PostListSelect_submitdone"
+					ev:submiterror="">
+				</xf:submission>
+				<xf:submission id="sub_PostSearch"
+					ref="data:json,dc_qnaSearchParam"
+					target='data:json,[{"id":"dc_qnaPostList","key":"result1"},{"id":"dc_PagingInfo","key":"result2"}]'
+					action="/RunningCoop/sysQnaSearch.do" method="post"
+					mediatype="application/json" encoding="UTF-8" instance=""
+					replace="" errorHandler="" customHandler="" mode="asynchronous"
+					processMsg="데이터 조회중..." ev:submit=""
+					ev:submitdone="scwin.sub_PostSearch_submitdone"
+					ev:submiterror="">
+				</xf:submission>
+			</xf:model>
+			<script type="text/javascript"><![CDATA[
+    scwin.init = function(){
+    	scwin.selectPostList();
+    };
+    
+    scwin.selectPostList = function(){
+    	$w.executeSubmission( "sub_PostListSelect" );
+    }
+       	
+    //sbm_select 실행 후
+	scwin.sub_PostListSelect_submitdone = function(e) {
+		scwin.setPageInfo();
+	};
+		
+	//PageList의 페이지 정보 셋팅
+	scwin.setPageInfo = function() {
+		var pageCnt = dc_PagingInfo.get( "pageLastNum" );
+		qnaPageList.setCount( pageCnt, true );
+	};
+	
+	scwin.qnaPageList_onviewchange = function(info) {
+		var newPage = info.newSelectedIndex;
+		
+		var startNum = dc_PagingInfo.get( "pageStartNum" );
+		
+		dc_qnaSearchParam.set( "index" , (newPage-1)+"" );
+		dc_qnaSearchParam.set( "pageStartNum", startNum+"" );
+		
+		scwin.selectPostList();
+	};
+	
+	scwin.do_search_onclick = function(e) {
+		$w.executeSubmission( "sub_PostSearch" );
+		search_sbr_title.setValue( "" );
+	};
+	
+	scwin.sub_PostSearch_submitdone = function(e) {
+		scwin.setPageInfo();
+	};
+	
+	scwin.listCnt_onviewchange = function(info) {
+		var count
+	};
+	
+	scwin.qnaPostList_oncellclick = function(row,col) {
+		var sbr_uuid = dc_qnaPostList.getCellData( row , "SBR_UUID" );
+		
+		$w.url("/RunningCoop/sysManager_ws5/sys_qnaView.xml&sbr_uuid="+sbr_uuid );
+		
+	};
+	]]></script>
+		</head>
+		<body>
+			<xf:group style="padding : 10px;overflow: auto;" id=""
+				class="">
+				<w2:textbox label="관리자 - 문의 게시판"
+					style="margin-bottom : 10px;text-align: center;" id=""
+					tagname="h3">
+				</w2:textbox>
+				<xf:group
+					style="text-align: right;margin-bottom : 10px;width : 50%;float : right;azimuth:"
+					id="" class="">
+					<xf:select1 selectedData="true" submenuSize="auto"
+						allOption="" optionOrder="false" disabled="false" id="listCnt"
+						direction="auto" chooseOption="" displayMode="label"
+						appearance="minimal" disabledClass="w2selectbox_disabled"
+						style="width: 150px;height: 25px;"
+						ref="data:dc_qnaSearchParam.listCnt"
+						ev:onviewchange="scwin.listCnt_onviewchange">
+						<xf:choices>
+							<xf:item>
+								<xf:label><![CDATA[5개씩보기]]></xf:label>
+								<xf:value><![CDATA[5]]></xf:value>
+							</xf:item>
+							<xf:item>
+								<xf:label><![CDATA[10개씩보기]]></xf:label>
+								<xf:value><![CDATA[10]]></xf:value>
+							</xf:item>
+							<xf:item>
+								<xf:label><![CDATA[15개씩보기]]></xf:label>
+								<xf:value><![CDATA[15]]></xf:value>
+							</xf:item>
+							<xf:item>
+								<xf:label><![CDATA[20개씩 보기]]></xf:label>
+								<xf:value><![CDATA[20]]></xf:value>
+							</xf:item>
+						</xf:choices>
+					</xf:select1>
+				</xf:group>
+				<xf:group style="text-align: left;margin-bottom : 10px;"
+					id="" class="">
+					<xf:input id="search_sbr_title"
+						style="width: 200px;height: 25px;margin-right : 10px;"
+						ref="data:dc_qnaSearchParam.SBR_TITLE">
+					</xf:input>
+					<xf:trigger type="button"
+						style="width: 80px;height: 23px;" id="do_search"
+						ev:onclick="scwin.do_search_onclick">
+						<xf:label><![CDATA[검색]]></xf:label>
+					</xf:trigger>
+				</xf:group>
+				<w2:gridView id="qnaPostList"
+					ignoreToggleOnDisabled="false" useShiftKey="true"
+					style="height: 150px;width : 100%;" useFilterList="false"
+					scrollByColumn="false" scrollByColumnAdaptive="false"
+					summaryAuto="false" fixedColumnWithHidden="true"
+					summaryOnlyAuto="false" dataList="dc_qnaPostList"
+					ignoreCellClick="false" autoFit="allColumn"
+					ev:oncellclick="scwin.qnaPostList_oncellclick">
+					<w2:caption style="" id="caption1"
+						value="this is a grid caption.">
+					</w2:caption>
+					<w2:header style="" id="header1">
+						<w2:row style="" id="row1">
+							<w2:column width="70" inputType="text"
+								style="height:20px;width : 10%;" id="column9"
+								blockSelect="false" displayMode="label" value="번호">
+							</w2:column>
+							<w2:column width="545" inputType="text"
+								style="height:20px;width : 50%;" id="column5"
+								blockSelect="false" displayMode="label" value="게시글제목">
+							</w2:column>
+							<w2:column width="111" inputType="text"
+								style="height:20px;width: 20%;" id="column3" blockSelect="false"
+								displayMode="label" value="작성자">
+							</w2:column>
+							<w2:column width="128" inputType="text"
+								style="height:20px;width: 20%;" id="column1" blockSelect="false"
+								displayMode="label" value="작성일">
+							</w2:column>
+						</w2:row>
+					</w2:header>
+					<w2:gBody style="" id="gBody1">
+						<w2:row style="" id="row2">
+							<w2:column width="70" inputType="text"
+								style="height:20px" id="RNUM" blockSelect="false"
+								displayMode="label">
+							</w2:column>
+							<w2:column width="545" inputType="text"
+								style="height:20px" id="SBR_TITLE" blockSelect="false"
+								displayMode="label">
+							</w2:column>
+							<w2:column width="111" inputType="text"
+								style="height:20px" id="MEM_NAME" blockSelect="false"
+								displayMode="label">
+							</w2:column>
+							<w2:column width="128" inputType="text"
+								style="height:20px" id="SBR_REGDATE" blockSelect="false"
+								displayMode="label">
+							</w2:column>
+						</w2:row>
+					</w2:gBody>
+				</w2:gridView>
+				<w2:pageList pageSize="10" displayButtonType="display"
+					id="qnaPageList" displayFormat="#"
+					style="width: 350px;height: 21px;margin : 0 auto;" ev:onclick=""
+					ev:onviewchange="scwin.qnaPageList_onviewchange">
+				</w2:pageList>
+
+
+
+			</xf:group>
+		</body>
+</html>

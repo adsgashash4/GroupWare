@@ -1,0 +1,42 @@
+#insert_Container {
+	display: none;
+}
+
+#mem_mgr_div {
+    clear: both;
+    overflow: auto;
+    padding-top: 15px;
+}
+
+.adm_memList_table {
+    border-collapse: collapse;
+    margin-top: 15px;
+    width: 95%;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+#mgr_Container {
+    clear: both;
+}
+
+.adm_memList_table th {
+    height: 25px;
+    background: darkgreen;
+    color: white;
+}
+
+.adm_memList_table tr:HOVER {
+    background: #F8F8F8;
+}
+
+.mem_search {
+    color: white;
+    padding: 3px 15px;
+    background-color: darkgreen;
+    border-color: #4cae4c;
+    font-size: 13pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}

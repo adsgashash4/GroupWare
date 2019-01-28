@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+<!-- 16. MyBatis 설정 작성 -->
+
+	<typeAliases>
+		<typeAlias type="com.pm.rc.dto.MemberDto" alias="MemberDto"/>
+		<typeAlias type="com.pm.rc.dto.GbAttachDto" alias="GbAttachDto"/>
+		<typeAlias type="com.pm.rc.dto.GroupBoardDto" alias="GroupBoardDto"/>
+		<typeAlias type="com.pm.rc.dto.GroupDto" alias="GroupDto"/>
+		<typeAlias type="com.pm.rc.dto.GroupWaitDto" alias="GroupWaitDto"/>
+		<typeAlias type="com.pm.rc.dto.ProjectDto" alias="ProjectDto"/>
+		<typeAlias type="com.pm.rc.dto.SbAttachDto" alias="SbAttachDto"/>
+		<typeAlias type="com.pm.rc.dto.ScheduleDto" alias="ScheduleDto"/>
+		<typeAlias type="com.pm.rc.dto.SystemBoardDto" alias="SystemBoardDto"/>
+		<typeAlias type="com.pm.rc.dto.WorkCommentDto" alias="WorkCommentDto"/>
+		<typeAlias type="com.pm.rc.dto.WorkDetailDto" alias="WorkDetailDto"/>
+		<typeAlias type="com.pm.rc.dto.WorkListDto" alias="WorkListDto"/>
+		<typeAlias type="com.pm.rc.dto.PagingDto" alias="pagingDto"/>
+		<typeAlias type="com.pm.rc.dto.PagingProDto" alias="PagingProDto"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="/sqls/accountMapper.xml"/>
+		<mapper resource="/sqls/sysBoardMapper.xml"/>
+		<mapper resource="/sqls/groupMapper.xml"/>
+		<mapper resource="/sqls/scheduleMapper.xml"/>
+		<mapper resource="/sqls/projectMapper.xml"/>
+		<mapper resource="/sqls/groupBoardMapper.xml"/>
+		<mapper resource="/sqls/managerMapper.xml"/>
+		<mapper resource="/sqls/workListMapper.xml"/>
+	</mappers>
+</configuration>

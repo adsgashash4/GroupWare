@@ -1,0 +1,430 @@
+
+/* 공지게시판 css 시작 */
+.noticeTable{
+	width: 95%;
+    height: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.notice_list_select{
+	width: 100px;
+    height: 30px;
+    margin-right: 25px;
+    font-size: 12pt;
+    background: #5cb85c;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 1px 5px;
+}
+
+.noticeTable th{
+	height: 25px;
+	background-color : #377d37;
+	color : white;
+	text-align: center;
+	font-size : 12pt;
+    border-top : 0.5px solid #D8D8D8;
+    border-bottom : 0.5px solid #D8D8D8;
+}
+
+.noticeTable td{
+	height: 25px;
+	text-align: center;
+	font-size : 10pt;
+	border-top : 0.5px solid #D8D8D8;
+    border-bottom : 0.5px solid #D8D8D8;
+}
+
+.noticeTable td:nth-child(2) {
+    text-align: left;
+    padding-left: 15px;
+    
+}
+
+.noticeTable td:nth-child(2) a{
+	text-decoration: none;
+    color : black;
+}
+
+.noticeTable td:nth-child(2) a:HOVER {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.noticeTable tr:HOVER {
+    background: #F8F8F8;
+}
+/* 공지게시판 css 끝 */
+
+/* 문의게시판 css 시작 */
+.user_control_div {
+    clear: both;
+    text-align: right;
+    padding-right: 25px;
+    margin-top: 10px;
+}
+
+.qna_writeForm_btn {
+    color: white;
+    padding: 2px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 11pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.qnaTable {
+    width: 95%;
+    border-collapse: collapse;
+    margin : 0 auto;
+    margin-top : 10px;
+    margin-bottom : 10px;
+}
+
+.qnaTable th {
+    background: #377d37;
+    color: white;
+    font-size: 11pt;
+    height: 25px;
+    border-top: 0.5px solid #D8D8D8;
+    border-bottom: 0.5px solid #D8D8D8;
+}
+
+.qnaTable td {
+    height: 25px;
+    font-size: 10pt;
+    border-top: 0.5px solid #D8D8D8;
+    border-bottom: 0.5px solid #D8D8D8;
+}
+
+.qnaTable td:nth-child(2) {
+    text-align: left;
+    padding-left: 15px;
+    
+}
+
+.qnaTable td:nth-child(2) span:HOVER {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.qnaTable tr:HOVER {
+    background: #F8F8F8;
+}
+
+/* 게시글 보기 화면 css 시작*/
+#view_div {
+    width: 90%;
+    margin: 0 auto;
+    margin-top : 40px;
+}
+
+.board_view_table {
+    width: 95%;
+    border-collapse: collapse;
+    margin-bottom : 30px;
+}
+
+.board_view_table tr:first-child th:first-child {
+    background: #377d37;
+    color: white;
+}
+
+.board_view_table td {
+    border-top: 0.5px solid lightgrey;
+    border-bottom: 0.5px solid lightgrey;
+    height: 25px;
+    text-align: left;
+    font-size : 10pt;
+}
+
+.board_view_table th {
+    height: 25px;
+    border-top: 0.5px solid lightgrey;
+    border-bottom: 0.5px solid lightgrey;
+    background: #F8F8F8;
+    font-size : 11pt;
+}
+
+.board_edit{
+	color: white;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 11pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    margin-right : 5px;
+}
+
+.board_delete{
+	color: white;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 11pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    margin-right : 5px;
+}
+
+.board_return{
+	color: white;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 11pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+/* 게시글 보기 화면 css 끝 */
+
+/* 문의글 작성 화면 css 시작 */
+
+.editor_div {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.qnatitle_area {
+    margin: 0 auto;
+    width: 100%;
+    height: 30px;
+    overflow: hidden;
+    border-top: 0.5px solid lightgrey;
+    border-bottom: 0.5px solid lightgrey;
+}
+
+.qnatitle_area div:first-child {
+    float: left;
+    width: 20%;
+    background: #F8F8F8;
+    text-align: center;
+    line-height: 30px;
+}
+
+.qnatitle_area div:nth-child(2) {
+    line-height: 30px;
+    text-align: left;
+    float: left;
+    padding-left: 20px;
+}
+
+.qnaattach_area {
+    overflow: hidden;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+    border-bottom: 0.5px solid lightgrey;
+}
+
+.qnaattach_area div:first-child {
+    float: left;
+    text-align: center;
+    width: 20%;
+    line-height: 50px;
+    background: #F8F8F8;
+}
+
+.qnaattach_area div:nth-child(2) {
+    line-height: 50px;
+    text-align: left;
+    padding-left: 30px;
+    float: left;
+    width: 30%;
+}
+
+.qnascr_area {
+    float: right;
+    line-height: 50px;
+    text-align: left;
+    width: 45%;
+}
+
+.qnascr_area input[type=checkbox] {
+    margin-left: 80px;
+}
+
+.qnascr_area input[name=sbr_pw] {
+	margin-left : 10px;
+    width: 150px;
+}
+
+.qnascr_area span {
+    font-size: 11pt;
+    vertical-align: initial;
+}
+
+.btn_area {
+    margin-bottom: 20px;
+}
+
+.write_submit_btn {
+    color: white;
+    padding: 2px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 11pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.write_submit_btn:HOVER {
+    box-shadow: 1px 1px 5px grey;
+    background: #4cae4c;
+}
+
+.write_collback_btn {
+    color: white;
+    padding: 2px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 11pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.write_collback_btn:HOVER {
+    box-shadow: 1px 1px 5px grey;
+    background: #4cae4c;
+}
+
+/* 문의 게시글 작성 화면 css 끝 */
+
+/* 문의 게시판 게시글 수정 화면 css */
+
+.editTitle_area {
+    width: 100%;
+    overflow: auto;
+    height: 30px;
+    border-top: 0.5px solid lightgrey;
+    border-bottom: 0.5px solid lightgrey;
+}
+
+.editTitle_area div:nth-child(2) {
+    float: left;
+    text-align: center;
+    line-height: 30px;
+    background: #F8F8F8;
+    width: 20%;
+}
+
+.editTitle_area div:nth-child(3) {
+    line-height: 30px;
+    text-align: left;
+    float: left;
+    padding-left: 20px;
+}
+
+input[name=sbr_title] {
+    width: 550px;
+    height: 20px;
+}
+
+.editAttach_area {
+    width: 100%;
+    overflow: hidden;
+    height: 50px;
+    border-bottom: 0.5px solid lightgrey;
+}
+
+.editAttach_area div:first-child {
+    width: 20%;
+    line-height: 50px;
+    background: #F8F8F8;
+    text-align: center;
+    float: left;
+}
+
+.editAttach_area div:nth-child(2) {
+    float: left;
+    line-height: 50px;
+    padding-left: 10px;
+    font-size: 11pt;
+}
+
+.editscr_area {
+    width: 100%;
+    height: 30px;
+    overflow: hidden;
+    border-bottom: 0.5px solid lightgrey;
+}
+
+.editscr_area div:first-child {
+    float: left;
+    width: 20%;
+    background: #F8F8F8;
+    line-height: 30px;
+}
+
+.editscr_area div:first-child>span {
+    vertical-align: super;
+}
+
+.editscr_area div:nth-child(2) {
+    float: left;
+    padding-left: 20px;
+    line-height: 25px;
+}
+
+input[name=sbr_pw] {
+    width: 250px;
+}
+
+.edit_submit_btn {
+    color: white;
+    padding: 2px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 11pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.edit_submit_btn:HOVER {
+    box-shadow: 1px 1px 5px grey;
+    background: #4cae4c;
+}
+
+.edit_collback_btn {
+    color: white;
+    padding: 2px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 11pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.edit_collback_btn:HOVER {
+    box-shadow: 1px 1px 5px grey;
+    background: #4cae4c;
+}
+
+/* 문의 게시판 게시글 수정 화면 css */
+
+/* 비밀번호 오류 화면 css */
+
+.error_text_area {
+    margin: auto;
+    margin-top: 100px;
+    margin-bottom: 10px;
+    width: 500px;
+    height: 200px;
+    border: 0.5px solid lightgrey;
+    line-height: 150px;
+}
+.error_collback_btn {
+    color: white;
+    padding: 2px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}

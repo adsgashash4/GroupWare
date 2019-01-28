@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!-- 12. properties 파일을 연결 -->
+
+
+	<!-- 13. *.properties 파일을 Classpath위치에 생성 -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:properties/db.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+
+	<!-- 14. db.properties파일에서 값을 가져와 datasource에 값 입력 -->
+	<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
+	
+	
+	<!-- 15. MyBatis를 spring이 IoC 할 수 있도록 bean에 담아준다. MyBatis의 환경을 선언한다. -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSession">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="/WEB-INF/spring/sqls/sqlMapConfig.xml"/>
+	</bean>
+	
+	<!-- 18. Spring이 bean으로 생성되는 객체를 만들어준다. SqlSessionTemplate -->
+	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSession"/>
+	</bean>
+	
+	
+	<!-- 27. Transaction 처리를 위한 TransactionManager -->
+	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
+			<!-- 관련된 모든 것에 transaction을 걸고 예외 발생 시 rollback -->
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 28. AOP를 이용하여 Transaction이 Service에서  작동 되도록 함 -->
+	<aop:config>
+		<aop:advisor pointcut="execution(* com.pm.rc.model.service.*Service*.*(..))" advice-ref="txAdvice"/>
+	</aop:config>
+	
+	<!-- 메일보내기 -->
+ 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com"/>
+		<property name="port" value="587"/>
+		<property name="username" value="pmrunningcoop@gmail.com"/>
+		<property name="password" value="hankyung_pm"/>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean> 
+	
+	
+</beans>

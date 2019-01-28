@@ -1,0 +1,486 @@
+/* 시스템관리자 - 공지게시판 관리화면 css 시작 */
+
+.adm_search_area {
+    float: left;
+    width: 30%;
+    text-align: left;
+    margin-bottom: 10px;
+    padding-left: 50px;
+}
+
+.adm_search_area input[type="text"] {
+    width: 200px;
+    height: 20px;
+    margin-right: 10px;
+    height: 30px;
+}
+
+#div_select_area {
+    text-align: right;
+    width: 50%;
+    float: right;
+    height: 30px;
+    margin-bottom: 10px;
+    padding-right: 50px;
+}
+
+.adm_notice_btn_area {
+    clear: both;
+    text-align: left;
+    margin-bottom: 10px;
+    width: 100%;
+    padding-left: 50px;
+}
+
+.adm_notice_list {
+    border-collapse: collapse;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.adm_notice_list th {
+    background: darkgreen;
+    color: white;
+    font-size: 12pt;
+    height: 25px;
+}
+
+.adm_notice_list td:nth-child(3) {
+    text-align: left;
+}
+
+.adm_notice_list td:nth-child(3)>a {
+    color: black;
+    text-decoration: none;
+}
+
+.adm_notice_list td:nth-child(3)>a:HOVER {
+    text-decoration: underline;
+}
+
+.notice_search {
+    color: white;
+    padding: 3px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 15pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.notice_search:HOVER{
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_listSelect {
+    text-align: center;
+    width: 80px;
+    height: 30px;
+    margin-top: 15px;
+    background: darkgreen;
+    color: white;
+    font-size: 12pt;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 0.5px solid green;
+}
+
+.adm_listSelect:HOVER{
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_notice_write_btn {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_notice_write_btn:HOVER{
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_notice_delete_btn {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_notice_delete_btn:HOVER{
+	box-shadow : 1px 1px 5px grey;
+}
+
+/* 시스템관리자 - 공지게시판 관리화면 css 끝 */
+
+/* 시스템관리자 - 문의게시판 관리화면 css 시작 */
+
+.adm_qna_btn_area {
+    clear: both;
+    text-align: left;
+    margin-bottom: 10px;
+    width: 100%;
+    padding-left: 50px;
+}
+
+.adm_qna_list {
+    border-collapse: collapse;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.adm_qna_list th {
+    background: darkgreen;
+    color: white;
+    font-size: 12pt;
+    height: 25px;
+}
+
+.adm_qna_list td:nth-child(3) {
+    text-align: left;
+}
+
+.adm_qna_list td:nth-child(3)>a {
+    color: black;
+    text-decoration: none;
+}
+
+.adm_qna_list td:nth-child(3)>a:HOVER {
+    text-decoration: underline;
+}
+
+.qna_search {
+    color: white;
+    padding: 3px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 15pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_qna_write_btn {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_qna_write_btn:HOVER{
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_qna_delete_btn {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_qna_delete_btn:HOVER{
+	box-shadow : 1px 1px 5px grey;
+}
+
+/* 시스템관리자 - 문의게시판 관리 화면 css 끝 */
+
+/* 시스템관리자 - 공지게시글 보기 화면 css 시작 */
+
+.adm_notice_view {
+    margin: auto;
+    width: 90%;
+    overflow: hidden;
+}
+
+.adm_notice_view_table {
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.adm_notice_view_table tr:first-child th:first-child {
+    background: darkgreen;
+    color: white;
+    height: 30px;
+    font-size: 12pt;
+}
+
+.adm_notice_view_table th {
+    background: #F8F8F8;
+    font-size: 10pt;
+}
+
+.adm_notice_view_table tr:last-child td:last-child {
+    text-align: left;
+}
+
+.adm_notice_edit {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_notice_edit:HOVER {
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_notice_delete {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_notice_delete:HOVER {
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_notice_back {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_notice_back:HOVER {
+	box-shadow : 1px 1px 5px grey;
+}
+
+/* 시스템 관리자 - 공지게시판 보기 화면 css 끝 */
+
+/* 시스템 관리자 - 공지게시판 작성 화면 css 시작 */
+
+.noticetitle_area {
+    margin: 0 auto;
+    width: 100%;
+    height: 30px;
+    overflow: hidden;
+    border-top: 0.5px solid lightgrey;
+    border-bottom: 0.5px solid lightgrey;
+}
+
+.noticetitle_area div:first-child {
+    float: left;
+    width: 20%;
+    background: #F8F8F8;
+    text-align: center;
+    line-height: 30px;
+}
+
+.noticetitle_area div:nth-child(2) {
+    line-height: 30px;
+    text-align: left;
+    float: left;
+    padding-left: 20px;
+}
+
+.noticeAttach_area {
+    overflow: hidden;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+    border-bottom: 0.5px solid lightgrey;
+}
+
+.noticeAttach_area div:first-child {
+    float: left;
+    text-align: center;
+    width: 20%;
+    line-height: 50px;
+    background: #F8F8F8;
+}
+
+.noticeAttach_area div:nth-child(2) {
+    line-height: 50px;
+    text-align: left;
+    padding-left: 30px;
+    float: left;
+    width: 30%;
+}
+
+.btn_area {
+    margin-bottom: 20px;
+}
+
+.notice_submit_btn {
+    color: white;
+    padding: 2px 12px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.notice_submit_btn:HOVER {
+    box-shadow: 1px 1px 5px grey;
+    background: #4cae4c;
+}
+
+/* 시스템관리자 - 공지 게시글 작성화면 css 끝 */
+
+/* 시스템관리자 - 문의 게시글 보기 화면 css 시작 */
+
+.adm_qna_view {
+    margin: auto;
+    width: 90%;
+    overflow: hidden;
+}
+
+.adm_qna_view_table {
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.adm_qna_view_table tr:first-child th:first-child {
+    background: darkgreen;
+    color: white;
+    height: 30px;
+    font-size: 12pt;
+}
+
+.adm_qna_view_table th {
+    background: #F8F8F8;
+    font-size: 10pt;
+}
+
+.adm_qna_view_table tr:last-child td:last-child {
+    text-align: left;
+}
+
+.adm_reply_write {
+	color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_reply_write:HOVER {
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_qna_edit {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_qna_edit:HOVER {
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_qna_delete {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_qna_delete:HOVER {
+	box-shadow : 1px 1px 5px grey;
+}
+
+.adm_qna_back {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.adm_qna_back:HOVER {
+	box-shadow : 1px 1px 5px grey;
+}
+
+/* 시스템 관리자 - 문의 게시글 보기 화면 css 끝 */
+
+/* 시스템 관리자 - 문의 답글 작성 화면 css 시작 */
+
+.qnaAttach_area{
+	 overflow: hidden;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+    border-bottom: 0.5px solid lightgrey;
+}
+
+.qnaAttach_area div:first-child {
+    float: left;
+    text-align: center;
+    width: 20%;
+    line-height: 50px;
+    background: #F8F8F8;
+}
+
+.qnaAttach_area div:nth-child(2) {
+    line-height: 50px;
+    text-align: left;
+    padding-left: 30px;
+    float: left;
+    width: 30%;
+}
+
+.qna_submit_btn {
+    color: white;
+    padding: 3px 10px;
+    background-color: #377d37;
+    border-color: #4cae4c;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.qna_submit_btn:HOVER {
+	box-shadow : 1px 1px 5px grey;
+}
+
+/* 시스템 관리자 - 문의 답글 작성 화면 css 끝 */

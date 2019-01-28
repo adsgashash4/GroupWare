@@ -1,0 +1,35 @@
+@import url(user_Project.css);
+@import url(user_Worklist.css);
+@import url(search_Form.css);
+@import url(user_projectList.css);
+@import url(user_ProjectManage.css);
+@import url(user_sysBoard.css);
+@import url(user_account.css);
+@import url(user_DeveloperInfo.css);
+@import url(user_Group.css);
+
+body {
+	overflow: auto;
+    padding: 0;
+    margin: 0;
+}
+
+#container {
+	position: absolute;
+	left : 0px;
+	top : 50px;
+	width : 80%;
+	height : 100%;
+	text-align: center;
+}
+
+.body_btn{
+	display: inline-block;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+}
+

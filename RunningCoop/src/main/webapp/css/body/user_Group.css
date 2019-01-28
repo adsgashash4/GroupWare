@@ -1,0 +1,227 @@
+.group_manage_btn{
+	width: 33.3%;
+    height: 40px;
+    float: left;
+    border: 0.3px solid #e4efd8;
+    background-color: #5cb85c;
+    color: white;
+    font-size: 15pt;
+    font-weight: bold;
+}
+
+.group_manage_table{
+	width: 60%;
+    margin: 0 auto;
+    text-align: left;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+}
+
+.group_manage_table th {
+    text-align: left;
+    padding-left: 10px;
+    background: #F8F8F8;
+    font-size: 11pt;
+}
+
+.group_manage_table td {
+    text-align: left;
+    padding-left: 10px;
+    line-height: 25px;
+    font-size: 10pt;
+}
+
+#grGoal {
+    width: 250px;
+    height: 100px;
+}
+
+#imgbox {
+    width: 150px;
+    height: 150px;
+    vertical-align: middle;
+}
+
+.grMgr_Edit_btn {
+    background: #5cb85c;
+    color: white;
+    font-weight: bold;
+    border: 0.5px solid transparent;
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+
+.grMgr_Edit_btn:HOVER {
+    box-shadow: 1px 1px 5px grey;
+}
+
+.grInfo_Edit_btn {
+    background: #5cb85c;
+    color: white;
+    font-weight: bold;
+    border: 0.5px solid transparent;
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 12pt;
+}
+
+.grInfo_Edit_btn:HOVER {
+    box-shadow: 1px 1px 5px grey;
+}
+
+#selectGrImg {
+    vertical-align: middle;
+    width: 150px;
+    height: 20px;
+    text-align: center;
+}
+
+.grBoard_manage{
+	clear: both;
+    display: none;
+    padding-top: 25px;
+}
+
+.member_manage_area {
+    clear: both;
+    margin: auto;
+    overflow: hidden;
+    padding: 10px;
+    width: 95%;
+}
+
+.div_member_area {
+    text-align: center;
+    width: 35%;
+    float: left;
+    border: 0.5px solid lightgrey;
+    margin-right: 20px;
+    margin-left: 5%;
+    height: 550px;
+    overflow: auto;
+}
+
+.memList_table_area {
+    width: 100%;
+    height: 450px;
+    overflow: auto;
+}
+
+.group_member_list {
+    border-collapse: collapse;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+.group_member_list tr:HOVER{
+	background: #F8F8F8;
+}
+
+.group_member_list th {
+    text-align: center;
+    width: 40%;
+    height: 30px;
+    background: darkgreen;
+    color: white;
+}
+
+.group_member_list td {
+    height: 30px;
+    line-height: 30px;
+}
+
+.group_member_list img {
+    width: 20px;
+    vertical-align: middle;
+}
+
+.group_member_list img:HOVER {
+    cursor: pointer;
+}
+
+.gr_inviteMem_area {
+    width: 100%;
+    height: 30px;
+}
+
+.memInvite_btn {
+    background: #5cb85c;
+    color: white;
+    font-weight: bold;
+    padding: 3px 10px;
+    border: 0.5px solid transparent;
+    border-radius: 3px;
+    font-size: 13pt;
+}
+
+.div_requestMem_area {
+    float: left;
+    width: 50%;
+    border: 0.5px solid lightgrey;
+    text-align: center;
+    height: 550px;
+}
+
+.requestMem_table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 95%;
+}
+
+.requestMem_table tr:HOVER {
+    background: #F8F8F8;
+}
+
+.mem_applyyn_btn {
+    background: #5cb85c;
+    color: white;
+    border: 0.5px solid transparent;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.requestMem_table th {
+    height: 30px;
+    background: darkgreen;
+    color: white;
+    text-align: center;
+}
+
+.requestMem_table td {
+    height: 30px;
+}
+
+.mem_applyyn_btn:HOVER {
+    box-shadow: 1px 1px 5px grey;
+}
+
+#request_Form {
+    text-align: center;
+}
+
+.request_groupMem_table {
+    width: 95%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+}
+
+.request_groupMem_table th {
+    border-top: 0.5px solid lightgrey;
+    text-align: center;
+    height: 25px;
+    font-size: 11pt;
+    background: #F8F8F8;
+}
+
+.request_groupMem_table td {
+    height: 25px;
+    font-size: 11pt;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.request_groupMem_table textarea[name=wait_content] {
+    width: 95%;
+    height: 100px;
+}
+

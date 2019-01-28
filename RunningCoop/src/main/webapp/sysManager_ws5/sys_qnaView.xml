@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+    <head>
+    	<w2:type>DEFAULT</w2:type>
+        <w2:buildDate/>
+        <xf:model>
+        	<xf:instance>
+        		<data xmlns="" />
+        	</xf:instance>
+        	<w2:dataCollection baseNode="map">
+        		<w2:dataMap baseNode="map" id="dc_qnaViewSelect">
+        			<w2:keyInfo>
+        				<w2:key id="SBR_UUID" name="name1"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="SBR_TITLE" name="name2"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="MEM_NAME" name="name3"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="SBR_CONTENT" name="name4"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="SBR_REGDATE" name="name5"
+        					dataType="text">
+        				</w2:key>
+        			</w2:keyInfo>
+        		</w2:dataMap>
+        		<w2:dataMap baseNode="map" id="dc_qnaAttachSelect">
+        			<w2:keyInfo>
+        				<w2:key id="SATT_NAME" name="name1"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="SATT_SIZE" name="name2"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="SATT_PATH" name="name3"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="SATT_RNAME" name="name4"
+        					dataType="text">
+        				</w2:key>
+        			</w2:keyInfo>
+        		</w2:dataMap>
+        		<w2:dataMap baseNode="map" id="dc_qnaViewParam">
+        			<w2:keyInfo>
+        				<w2:key id="sbr_uuid" name="name1"
+        					dataType="text">
+        				</w2:key>
+        			</w2:keyInfo>
+        		</w2:dataMap>
+        	</w2:dataCollection>
+        	<w2:workflowCollection></w2:workflowCollection>
+        	<xf:submission id="sub_postViewSelect"
+        		ref="data:json,dc_qnaViewParam"
+        		target='data:json,[{"id":"dc_qnaViewParam","key":"result1"},{"id":"dc_qnaAttachSelect","key":"result2"}]'
+        		action="/RunningCoop/viewQna.do" method="post"
+        		mediatype="application/json" encoding="UTF-8" instance=""
+        		replace="" errorHandler="" customHandler=""
+        		mode="asynchronous" processMsg="게시글 조회중..." ev:submit=""
+        		ev:submitdone="" ev:submiterror="">
+        	</xf:submission>
+        </xf:model>
+        <script type="text/javascript"><![CDATA[
+		scwin.init = function(){
+			var sbr_uuid = $w.getParameter( "sbr_uuid" );
+			dc_qnaViewParam.set( "sbr_uuid" , sbr_uuid );
+			$w.executeSubmission( "sub_postViewSelect" );
+		};
+		]]></script>
+    </head>
+    <body>
+    	<xf:group style="padding : 10px;" id="" class="">
+    		<w2:textbox label="문의 게시글 보기"
+    			style="height: 23px;text-align: center;" id="" tagname="h3">
+    		</w2:textbox>
+    		<xf:group style="padding : 10px" id="" class="">
+    			<xf:group tagname="table" style="width:100%;" id=""
+    				class="w2tb">
+    				<w2:attributes>
+    					<w2:summary></w2:summary>
+    				</w2:attributes>
+    				<xf:group tagname="caption"></xf:group>
+    				<xf:group tagname="colgroup">
+    					<xf:group tagname="col" style="width:25.00%;"></xf:group>
+    					<xf:group tagname="col" style="width:25.00%"></xf:group>
+    					<xf:group tagname="col" style="width:25.00%;"></xf:group>
+    					<xf:group tagname="col" style="width:25.00%"></xf:group>
+    				</xf:group>
+    				<xf:group tagname="tr" style="height:25px;">
+    					<xf:group tagname="th" style=""
+    						class="w2tb_th">
+    						<w2:attributes>
+    							<w2:scope>col</w2:scope>
+    							<w2:colspan>4</w2:colspan>
+    							<w2:rowspan>1</w2:rowspan>
+    						</w2:attributes>
+    						<w2:attributes>
+    							<w2:scope>col</w2:scope>
+    						</w2:attributes>
+    						<w2:attributes>
+    							<w2:scope>col</w2:scope>
+    						</w2:attributes>
+    						<w2:attributes>
+    							<w2:scope>col</w2:scope>
+    						</w2:attributes>
+    						<w2:textbox label=""
+    							style="width:100%;height: 23px;text-align: center;" id="" ref="data:dc_qnaViewSelect.SBR_TITLE">
+    						</w2:textbox>
+    					</xf:group>
+    				</xf:group>
+    				<xf:group tagname="tr" style="height:25;">
+    					<xf:group tagname="td" style="text-align: center;"
+    						class="w2tb_td">작성자</xf:group>
+    					<xf:group tagname="td" style=""
+    						class="w2tb_td">
+    						<w2:textbox label=""
+    							style="width:100%;height: 23px;" id="" ref="data:dc_qnaViewSelect.MEM_NAME">
+    						</w2:textbox>
+    					</xf:group>
+    					<xf:group tagname="td" style="text-align: center"
+    						class="w2tb_td">작성일</xf:group>
+    					<xf:group tagname="td" style=""
+    						class="w2tb_td">
+    						<w2:textbox label=""
+    							style="width:100%;height: 23px;" id="" ref="data:dc_qnaViewSelect.SBR_REGDATE">
+    						</w2:textbox>
+    					</xf:group>
+    				</xf:group>
+    				<xf:group tagname="tr" style="height:25;">
+    					<xf:group tagname="td" style="text-align: center;"
+    						class="w2tb_td">첨부파일</xf:group>
+    					<xf:group tagname="td" style=""
+    						class="w2tb_td">
+    						<w2:attributes>
+    							<w2:colspan>3</w2:colspan>
+    							<w2:rowspan>1</w2:rowspan>
+    						</w2:attributes>
+
+    						<w2:textbox label=""
+    							style="width:100%;height: 23px;" id="" ref="data:dc_qnaAttachSelect.SATT_NAME">
+    						</w2:textbox>
+    					</xf:group>
+    				</xf:group>
+    				<xf:group tagname="tr" style="height:150;">
+    					<xf:group tagname="td" style=""
+    						class="w2tb_td">
+    						<w2:attributes>
+    							<w2:colspan>4</w2:colspan>
+    							<w2:rowspan>1</w2:rowspan>
+    						</w2:attributes>
+    						<xf:textarea
+    							style="width:100%;height: 100px;" id="" ref="data:dc_qnaViewSelect.SBR_CONTENT">
+    						</xf:textarea>
+    					</xf:group>
+    				</xf:group>
+    			</xf:group>
+    		</xf:group>
+    	</xf:group>
+    </body>
+</html>

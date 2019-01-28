@@ -1,0 +1,99 @@
+@CHARSET "UTF-8";
+
+	#calendar{
+	  	margin: auto;
+	    display:block;
+	    .border-box;
+	    background:white;
+	    width:650px; 
+	    border:solid 1px #CCC;
+	    margin-bottom:10px;
+	}
+	
+	.calendar_header{
+		float:left;
+	    width:100%;
+	    height:60px;
+	    background-color: #5cb85c;
+	    color:white;
+	}
+	
+	.calendar_header *{
+	    height: 50px;
+	    line-height:50px !important;
+	    display:inline-block;
+    	vertical-align:middle;
+	} 
+	
+ 	#calendar th {
+		color: #5cb85c;
+		border-bottom: 1px solid #ccc;
+	} 
+	
+	#calendar td {
+		background:white;
+		width: 92px;
+		height: 80px;
+		padding: 0px;
+		vertical-align: top;
+		text-align: left;
+		font-size: 10pt;
+		border: 1px solid transparent;
+	}
+	
+	.calendar_list{
+		font-size: 8pt;
+		width: 88px;
+		height: 50px;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	
+	a {
+		text-decoration: none;
+	}
+	
+	.plus {
+		width: 15px;
+		height: 15px;
+	}
+	
+	.arrow {
+		padding-top: 17px;
+		width: 15px;
+		height: 15px;
+	}
+	
+	b {
+		font-size: 14pt;
+	}
+	
+	.listChk{
+		cursor: pointer;
+	}
+	
+	input[type=text], input[type=date], input[type=time]{
+		background-color: white;
+		border: inset;
+	}
+	
+	.scheduleBox, .scheduleModiBox {
+		width: 300px;
+		display: none;
+	}
+	
+	#dayList, #dayDetail{
+		display : none;
+		width: 300px;
+		float: right;
+	}
+	
+	.scheduleBtn{
+		border-radius: 4px; 
+		border: 1px solid transparent; 
+		background-color: #5cb85c; 
+		color: #fff;
+		margin-top: 5px;
+		margin-bottom: 3px;
+	}

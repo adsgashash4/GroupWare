@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pm.rc.groupboard">
+		<resultMap type="GroupBoardDto" id="groupboarddto">
+		<result property="br_uuid" column="BR_UUID"/>
+		<result property="br_title" column="BR_TITLE"/>
+		<result property="br_regDate" column="BR_REGDATE"/>
+		<result property="br_noticeYN" column="BR_NOTICEYN"/>
+		<result property="memberdto.mem_name" column="MEM_NAME"/>
+	</resultMap>
+	
+	<select id="gbListSelect" parameterType="java.lang.String" resultMap="groupboarddto">
+		SELECT BR.BR_UUID, BR.BR_TITLE, M.MEM_NAME, TO_CHAR(BR.BR_REGDATE,'YYYY/MM/DD') BR_REGDATE, BR.BR_NOTICEYN
+		FROM RC_GRBOARD BR, RC_MEMBER M
+		WHERE GR_ID = #{gr_id} AND BR.MEM_ID = M.MEM_ID AND BR.BR_DELYN = 'N'
+	</select>
+	
+	<update id="gboardDelete" parameterType="java.lang.String">
+	UPDATE RC_GRBOARD SET BR_DELYN = 'Y'
+	WHERE BR_UUID = #{br_uuid}
+	</update>
+	
+	<!-- 	그룹게시판 게시글 수정 -->	
+	<select id="gBeditViewSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT GB.BR_UUID, GB.MEM_ID, M.MEM_NAME, TO_CHAR(GB.BR_REGDATE, 'YYYY/MM/DD') BR_REGDATE,
+		GB.BR_TITLE, GB.BR_CONTENT
+		FROM RC_MEMBER M, RC_GRBOARD GB
+		WHERE M.MEM_ID = GB.MEM_ID AND GB.BR_UUID = #{br_uuid}	
+	</select>
+	
+	<!-- 	그룹게시판 게시글 수정시작 -->
+	<update id="grBoardUpdate" parameterType="java.util.Map">
+		UPDATE RC_GRBOARD 
+		SET BR_TITLE = #{br_title}, BR_CONTENT = #{br_content}
+		WHERE BR_UUID = #{br_uuid}
+	</update>
+	
+</mapper>

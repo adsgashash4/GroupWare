@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pm.rc.project">
+
+	<select id="groupProSelect" parameterType="java.util.Map"
+		resultType="ProjectDto">
+	<![CDATA[
+		SELECT P.PR_ID, P.PR_NAME, P.PR_PRORATE, 
+		(SELECT TO_DATE(TO_CHAR(P.PR_ENDDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')
+			FROM DUAL) PR_ENDDATE
+		FROM RC_PROJECT P
+		WHERE P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP WHERE GP.GR_ID = #{gr_id}
+		AND GP.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id}))
+		AND P.PR_DELYN = 'N'
+		AND NOT P.PR_CONDITION = 'C'
+	]]>
+	</select>
+
+	<select id="myProSelect" parameterType="java.lang.String"
+		resultType="ProjectDto">
+	<![CDATA[
+		SELECT P.PR_ID, P.PR_NAME, P.PR_PRORATE, 
+		(SELECT TO_DATE(TO_CHAR(P.PR_ENDDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')
+			FROM DUAL) PR_ENDDATE
+		FROM RC_PROJECT P
+		WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+		AND P.PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+		AND P.PR_DELYN = 'N'
+		AND NOT P.PR_CONDITION = 'C'
+	]]>
+	</select>
+
+	<insert id="iProInsert" parameterType="java.util.Map">
+		INSERT INTO RC_PROJECT
+		(PR_ID, PR_NAME, PR_STARTDATE, PR_ENDDATE, PR_GOAL, PR_ETC)
+		VALUES
+		(#{pr_id}, #{pr_name}, TO_DATE(#{pr_startdate}, 'YYYY-MM-DD'),
+		TO_DATE(#{pr_enddate}, 'YYYY-MM-DD'),
+		#{pr_goal}, #{pr_etc})
+	</insert>
+
+	<insert id="iPromemInsert" parameterType="java.util.Map">
+		INSERT INTO RC_PROMEM
+		(PR_ID, MEM_ID, PR_LEVEL)
+		VALUES
+		(#{pr_id}, #{mem_id}, 'PM')
+	</insert>
+	
+	<insert id="gProInsert" parameterType="java.util.Map">
+		INSERT INTO RC_PROJECT (PR_ID, PR_NAME, PR_STARTDATE, PR_ENDDATE, PR_GOAL, PR_ETC)
+		VALUES
+		(#{pr_id}, #{pr_name}, TO_DATE(#{pr_startdate}, 'YYYY-MM-DD'), TO_DATE(#{pr_enddate}, 'YYYY-MM-DD'),
+			#{pr_goal}, #{pr_etc})
+	</insert>
+	
+	<insert id="gPromemInsert" parameterType="java.util.Map">
+		INSERT INTO RC_PROMEM (PR_ID, MEM_ID, PR_LEVEL)
+		VALUES
+		(#{pr_id}, #{mem_id}, 'PM')
+	</insert>
+	
+	<insert id="gGroupProInsert" parameterType="java.util.Map">
+		INSERT INTO RC_GRPRO (GR_ID, PR_ID)
+		VALUES
+		(#{gr_id}, #{pr_id})
+	</insert>
+
+	<select id="prDetailSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT P.PR_NAME, M.MEM_NAME, P.PR_MEMCNT, P.PR_GOAL,
+		TO_CHAR(P.PR_STARTDATE, 'YYYY-MM-DD') PR_STARTDATE,
+		TO_CHAR(P.PR_ENDDATE, 'YYYY-MM-DD') PR_ENDDATE, P.PR_ETC,
+		P.PR_SEARCHYN, P.PR_CONDITION, P.PR_PRORATE
+		FROM RC_PROJECT P, RC_MEMBER M
+		WHERE P.PR_ID = #{pr_id}
+		AND M.MEM_ID =
+		(SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+	</select>
+	
+	<select id="prMemListSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT M.MEM_ID, M.MEM_NAME 
+  		FROM RC_MEMBER M
+		WHERE M.MEM_ID IN (SELECT P.MEM_ID FROM RC_PROMEM P WHERE P.PR_ID = #{pr_id})
+	</select>
+	
+	<select id="myLevelSelect" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT PM.PR_LEVEL FROM RC_PROMEM PM
+		WHERE PM.PR_ID = #{pr_id} AND PM.MEM_ID = #{mem_id}
+	</select>
+	
+	<select id="prManagerSelect" parameterType="java.lang.String" resultType="MemberDto">
+		SELECT MEM_ID
+		FROM RC_PROMEM
+		WHERE PR_LEVEL = 'PM' AND PR_ID = #{pr_id}
+	</select>
+	
+	<update id="projectEdit" parameterType="ProjectDto">
+		UPDATE RC_PROJECT SET PR_NAME = #{pr_name}, PR_ENDDATE = #{pr_endDate}, 
+			PR_GOAL = #{pr_goal}, PR_SEARCHYN = #{pr_searchYN}, PR_CONDITION = #{pr_condition}
+		WHERE PR_ID = #{pr_id}
+	</update>
+	
+	<select id="prMemInsertSearch" parameterType="java.util.Map" resultType="MemberDto">
+		SELECT M.MEM_ID, M.MEM_NAME
+		FROM RC_MEMBER M
+		WHERE NOT M.MEM_ID IN 
+		(SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = #{pr_id})
+		AND M.MEM_ID IN (SELECT GM.MEM_ID FROM RC_GROUPMEM GM WHERE GM.GR_ID = #{gr_id})
+	</select>
+	
+	<insert id="prMemInsert" parameterType="java.util.Map">
+		INSERT INTO RC_PROMEM (PR_ID, MEM_ID)
+  		VALUES
+  		(#{pr_id}, #{mem_id})
+	</insert>
+	
+	<update id="prMemUpdate" parameterType="java.lang.String">
+		UPDATE RC_PROJECT SET PR_MEMCNT = (SELECT COUNT(*) FROM RC_PROMEM WHERE PR_ID = #{pr_id})
+  		WHERE PR_ID = #{pr_id}
+	</update>
+	
+	<delete id="prMemDelete" parameterType="java.util.Map">
+		DELETE FROM RC_PROMEM 
+  		WHERE MEM_ID = #{mem_id} AND PR_ID = #{pr_id} AND PR_LEVEL = 'PIM'
+	</delete>
+	
+	<update id="prMgrEdit_1" parameterType="java.util.Map">
+		UPDATE RC_PROMEM SET PR_LEVEL = 'PIM'
+		WHERE MEM_ID = (SELECT MEM_ID FROM RC_PROMEM WHERE PR_ID = #{pr_id} AND PR_LEVEL = 'PM')
+ 			AND PR_ID = #{pr_id}
+	</update>
+	
+	<update id="prMgrEdit_2" parameterType="java.util.Map">
+		UPDATE RC_PROMEM SET PR_LEVEL = 'PM'
+		WHERE MEM_ID = #{new_id} AND PR_ID = #{pr_id}
+	</update>
+	
+	<select id="memInfoSelect_1" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT M.MEM_ID, M.MEM_NAME, M.MEM_EMAIL, M.MEM_PHONE
+		FROM RC_MEMBER M
+		WHERE M.MEM_ID = #{mem_id}
+	</select>
+	
+	<select id="memInfoSelect_2" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT P.PR_ID, P.PR_NAME, P.PR_CONDITION
+		FROM RC_PROJECT P
+		WHERE P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP WHERE GP.GR_ID = #{gr_id})
+			AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+	</select>
+	
+	<select id="projectDelete_1" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT WK_ID FROM RC_WORKLIST
+		WHERE PR_ID = #{pr_id} AND WK_DELYN = 'N'
+	</select>
+	
+	<select id="projectDelete_2" parameterType="java.lang.String" resultType="GbAttachDto">
+		SELECT GATT_PATH, GATT_RNAME FROM RC_GNPATTACH
+		WHERE WK_ID = #{wk_id}
+	</select>
+	
+	<delete id="projectDelete_3" parameterType="java.lang.String">
+		DELETE FROM RC_GNPATTACH
+		WHERE WK_ID = #{wk_id}
+	</delete>
+	
+	<update id="projectDelete_4" parameterType="java.lang.String">
+		UPDATE RC_WORKCOMMENT SET WCOM_DELYN = 'Y'
+		WHERE WK_ID = #{wk_id}
+	</update>
+	
+	<update id="projectDelete_5" parameterType="java.lang.String">
+		UPDATE RC_WORKDETAIL SET WD_DELYN = 'Y'
+		WHERE WK_ID = #{wk_id}
+	</update>
+	
+	<update id="projectDelete_6" parameterType="java.lang.String">
+		UPDATE RC_WORKLIST SET WK_DELYN = 'Y'
+		WHERE PR_ID = #{pr_id}
+	</update>
+	
+	<delete id="projectDelete_7" parameterType="java.lang.String">
+		DELETE FROM RC_PROMEM
+		WHERE PR_ID = #{pr_id}
+	</delete>
+	
+	<delete id="projectDelete_8" parameterType="java.lang.String">
+		DELETE FROM RC_GRPRO
+		WHERE PR_ID = #{pr_id}
+	</delete>
+	
+	<update id="projectDelete_9" parameterType="java.lang.String">
+		UPDATE RC_PROJECT SET PR_MEMCNT = (SELECT COUNT(*) FROM RC_PROMEM WHERE PR_ID = #{pr_id})
+		WHERE PR_ID = #{pr_id}
+	</update>
+	
+	<update id="projectDelete_10" parameterType="java.lang.String">
+		UPDATE RC_PROJECT SET PR_DELYN = 'Y'
+		WHERE PR_ID = #{pr_id}
+	</update>
+	
+	<select id="prRateEdit_1" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT WK_PRORATE FROM RC_WORKLIST
+		WHERE PR_ID = #{pr_id}
+	</select>
+	
+	<update id="prRateEdit_2" parameterType="java.util.Map">
+		UPDATE RC_PROJECT SET PR_PRORATE = #{pr_proRate}
+		WHERE PR_ID = #{pr_id}
+	</update>
+	
+	<update id="editGProCondition_1" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE RC_PROJECT SET PR_CONDITION = 'I'
+			WHERE PR_ID IN 
+				(SELECT P.PR_ID FROM RC_PROJECT P
+					WHERE P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP WHERE GP.GR_ID = #{gr_id}
+					AND GP.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id}))
+				AND P.PR_DELYN = 'N')
+			AND (SELECT TO_DATE(TO_CHAR(PR_STARTDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')
+			FROM DUAL) < 0
+		]]>
+		
+	</update>
+	
+	<update id="editGProCondition_2" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE RC_PROJECT SET PR_CONDITION = 'C'
+			WHERE PR_ID IN 
+				(SELECT P.PR_ID FROM RC_PROJECT P
+					WHERE P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP WHERE GP.GR_ID = #{gr_id}
+					AND GP.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id}))
+				AND P.PR_DELYN = 'N')
+			AND (SELECT TO_DATE(TO_CHAR(PR_ENDDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')
+			FROM DUAL) < 0
+		]]>
+	</update>
+	
+	<update id="editIProCondition_1" parameterType="java.lang.String">
+		<![CDATA[
+			UPDATE RC_PROJECT SET PR_CONDITION = 'I'
+			WHERE PR_ID IN 
+				(SELECT P.PR_ID FROM RC_PROJECT P
+					WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+					AND P.PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+				AND P.PR_DELYN = 'N')
+			AND (SELECT TO_DATE(TO_CHAR(PR_STARTDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')
+			FROM DUAL) < 0
+		]]>
+	</update>
+	
+	<update id="editIProCondition_2" parameterType="java.lang.String">
+		<![CDATA[
+			UPDATE RC_PROJECT SET PR_CONDITION = 'C'
+			WHERE PR_ID IN 
+				(SELECT P.PR_ID FROM RC_PROJECT P
+					WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+					AND P.PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+				AND P.PR_DELYN = 'N')
+			AND (SELECT TO_DATE(TO_CHAR(PR_ENDDATE, 'YYYYMMDD'), 'YYYYMMDD') - TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')
+			FROM DUAL) < 0
+		]]>
+	</update>
+	
+	<select id="myDoingPrSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT COUNT(*) AS DOINGPRO FROM RC_PROJECT
+		WHERE PR_CONDITION = 'I' AND PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+	</select>
+	
+	<select id="myToDoPrSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT COUNT(*) AS TODOPRO FROM RC_PROJECT
+		WHERE PR_CONDITION = 'T' AND PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+	</select>
+	
+	<select id="myDidPrSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT COUNT(*) AS DONEPRO FROM RC_PROJECT
+		WHERE PR_CONDITION = 'C' AND PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+	</select>
+	
+	<!-- 	myDidGPrListSelect 페이징 처리 시작	 -->
+	<select id="myDidGPrListSelect" parameterType="ProjectDto" resultType="java.util.Map">
+		SELECT * FROM 
+			(SELECT ROWNUM RNUMBER, R.* FROM
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT G.GR_NAME, P.PR_ID, P.PR_NAME, M.MEM_NAME, P.PR_PRORATE
+						FROM RC_GROUP G, RC_PROJECT P, RC_MEMBER M
+						WHERE P.PR_CONDITION = 'C' AND G.GR_ID = (SELECT GP.GR_ID FROM RC_GRPRO GP WHERE GP.PR_ID = P.PR_ID) 
+						AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+						AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+						AND P.PR_DELYN = 'N'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+						ORDER BY P.PR_REGDATE DESC
+				) P
+				ORDER BY RNUM DESC) R)
+		WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}	
+	</select>
+	
+	<select id="myDidGpTotalcount" parameterType="java.lang.String" resultType="java.lang.Integer">
+	SELECT NVL(COUNT(*),0)
+	FROM RC_GROUP G, RC_PROJECT P, RC_MEMBER M
+	WHERE P.PR_CONDITION = 'C' AND G.GR_ID = (SELECT GP.GR_ID FROM RC_GRPRO GP WHERE GP.PR_ID = P.PR_ID) 
+	AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+	AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+	AND P.PR_DELYN = 'N'
+	<if test="pr_name != null">
+		AND P.PR_NAME LIKE '%${pr_name}%'
+	</if>
+	</select>
+	<!-- myDidGPrListSelect 페이징 처리 끝 -->
+	
+	<!-- myDidIPrListSelect 페이징 시작 -->
+	<select id="myDidIPrListSelect" parameterType="ProjectDto" resultType="java.util.Map">
+		SELECT * FROM
+			(SELECT ROWNUM RNUMBER, R.* FROM
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT P.PR_ID, P.PR_NAME, M.MEM_NAME, P.PR_PRORATE
+						FROM RC_PROJECT P, RC_MEMBER M
+							WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+							AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_LEVEL = 'PM' AND PM.PR_ID = P.PR_ID)
+							AND P.PR_DELYN = 'N'
+							AND P.PR_CONDITION = 'C'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>							
+							AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+		    		) P
+		    	ORDER BY RNUM DESC) R)
+			WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}	
+	</select>
+	
+	<select id="myDidIpTotalcount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*),0)
+			FROM RC_PROJECT P, RC_MEMBER M
+				WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+				AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_LEVEL = 'PM' AND PM.PR_ID = P.PR_ID)
+				AND P.PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+				AND P.PR_DELYN = 'N'
+				AND P.PR_CONDITION = 'C'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>				
+	</select>
+	<!-- myDidIPrListSelect 페이징 끝  -->
+	
+	<!-- myDoingGPrListSelect 페이징 시작 -->
+	<select id="myDoingGPrListSelect" parameterType="ProjectDto" resultType="java.util.Map">
+		SELECT * FROM 
+			(SELECT ROWNUM RNUMBER, R.* FROM
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT G.GR_NAME, P.PR_ID, P.PR_NAME, M.MEM_NAME, P.PR_PRORATE
+						FROM RC_GROUP G, RC_PROJECT P, RC_MEMBER M
+						WHERE P.PR_CONDITION = 'I' AND G.GR_ID = (SELECT GP.GR_ID FROM RC_GRPRO GP WHERE GP.PR_ID = P.PR_ID) 
+						AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+						AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+						AND P.PR_DELYN = 'N'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+						ORDER BY P.PR_REGDATE DESC
+				) P
+				ORDER BY RNUM DESC) R)
+		WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}	
+	</select>
+		
+	<select id="myDoingGpTotalcount" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT NVL(COUNT(*),0)
+			FROM RC_GROUP G, RC_PROJECT P, RC_MEMBER M
+				WHERE P.PR_CONDITION = 'I' AND G.GR_ID = (SELECT GP.GR_ID FROM RC_GRPRO GP WHERE GP.PR_ID = P.PR_ID) 
+				AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+				AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+				AND P.PR_DELYN = 'N'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+	</select>
+	<!-- myDoingGPrListSelect 페이징 끝 -->
+	
+	<!-- myDoingIPrListSelect 페이징 시작 -->
+	<select id="myDoingIPrListSelect" parameterType="ProjectDto" resultType="java.util.Map">
+		SELECT * FROM
+			(SELECT ROWNUM RNUMBER, R.* FROM
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT P.PR_ID, P.PR_NAME, M.MEM_NAME, P.PR_PRORATE
+						FROM RC_PROJECT P, RC_MEMBER M
+							WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+							AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_LEVEL = 'PM' AND PM.PR_ID = P.PR_ID)
+							AND P.PR_DELYN = 'N'
+							AND P.PR_CONDITION = 'I'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+							AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+		    		) P
+		    	ORDER BY RNUM DESC) R)
+			WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}	
+	</select>
+	
+	<select id="myDoingIpTotalcount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*),0)
+			FROM RC_PROJECT P, RC_MEMBER M
+				WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+				AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_LEVEL = 'PM' AND PM.PR_ID = P.PR_ID)
+				AND P.PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+				AND P.PR_DELYN = 'N'
+				AND P.PR_CONDITION = 'I'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+	</select>
+	
+	<!-- 	myTodoGP 페이징 처리 시작 -->
+	<select id="myTodoGPrListSelect" parameterType="ProjectDto" resultType="java.util.Map">
+		SELECT * FROM 
+			(SELECT ROWNUM RNUMBER, R.* FROM
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT G.GR_NAME, P.PR_ID, P.PR_NAME, M.MEM_NAME, P.PR_PRORATE
+						FROM RC_GROUP G, RC_PROJECT P, RC_MEMBER M
+						WHERE P.PR_CONDITION = 'T' AND G.GR_ID = (SELECT GP.GR_ID FROM RC_GRPRO GP WHERE GP.PR_ID = P.PR_ID) 
+						AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+						AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+						AND P.PR_DELYN = 'N'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+						ORDER BY P.PR_REGDATE DESC
+				) P
+				ORDER BY RNUM DESC) R)
+		WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}	
+	</select>
+	
+	<select id="myTodoGpTotalcount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*),0)
+			FROM RC_GROUP G, RC_PROJECT P, RC_MEMBER M
+				WHERE P.PR_CONDITION = 'T' AND G.GR_ID = (SELECT GP.GR_ID FROM RC_GRPRO GP WHERE GP.PR_ID = P.PR_ID) 
+				AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+				AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+				AND P.PR_DELYN = 'N'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+	</select>
+	<!-- 	myTodoGP 페이징 처리 끝 -->
+	
+	<!-- 	myTodoIPrListSelect 페이징 처리 시작 -->
+	<select id="myTodoIPrListSelect" parameterType="ProjectDto" resultType="java.util.Map">
+		SELECT * FROM
+			(SELECT ROWNUM RNUMBER, R.* FROM
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT P.PR_ID, P.PR_NAME, M.MEM_NAME, P.PR_PRORATE
+						FROM RC_PROJECT P, RC_MEMBER M
+							WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+							AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_LEVEL = 'PM' AND PM.PR_ID = P.PR_ID)
+							AND P.PR_DELYN = 'N'
+							AND P.PR_CONDITION = 'T'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+							AND P.PR_ID IN (SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+		    		) P
+		    	ORDER BY RNUM DESC) R)
+			WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}	
+	</select>
+	
+	<select id="myTodoIpTotalcount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*),0)
+			FROM RC_PROJECT P, RC_MEMBER M
+				WHERE NOT P.PR_ID IN (SELECT GP.PR_ID FROM RC_GRPRO GP)
+				AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_LEVEL = 'PM' AND PM.PR_ID = P.PR_ID)
+				AND P.PR_ID IN (SELECT PR_ID FROM RC_PROMEM WHERE MEM_ID = #{mem_id})
+				AND P.PR_DELYN = 'N'
+				AND P.PR_CONDITION = 'T'
+					<if test="pr_name != null">
+						AND P.PR_NAME LIKE '%${pr_name}%'
+					</if>
+	</select>
+	<!-- 	myTodoIPrListSelect 페이징 끝 -->
+	
+	<!-- 	allPrSearchSelect 페이징 처리 시작 -->
+	<select id="allPrSearchSelect" parameterType="ProjectDto" resultType="java.util.Map">
+	SELECT *
+		FROM ( SELECT ROWNUM RNUM, P.*
+		      FROM (
+	            		SELECT P.PR_ID, P.PR_NAME, M.MEM_NAME, P.PR_CONDITION,
+						CASE WHEN (SELECT GP.GR_ID FROM RC_GRPRO GP WHERE GP.PR_ID = P.PR_ID) IS NOT NULL
+						THEN '그룹' ELSE '개인' END AS GRYN
+						FROM RC_PROJECT P, RC_MEMBER M
+						WHERE P.PR_DELYN = 'N'
+						AND P.PR_SEARCHYN = 'A'
+						AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+						AND P.PR_NAME LIKE '%${pr_name}%'
+		      ) P
+		    )	
+		WHERE RNUM BETWEEN #{paging.start} AND #{paging.last}
+	</select>
+	
+	<select id="allPrSearchTotalCount" parameterType="ProjectDto" resultType="java.lang.Integer">
+	SELECT NVL(COUNT(*),0)
+				FROM RC_PROJECT P, RC_MEMBER M
+				WHERE P.PR_DELYN = 'N'
+				AND P.PR_SEARCHYN = 'A'
+				AND M.MEM_ID = (SELECT PM.MEM_ID FROM RC_PROMEM PM WHERE PM.PR_ID = P.PR_ID AND PM.PR_LEVEL = 'PM')
+				AND P.PR_NAME LIKE '%${pr_name}%'
+	</select>
+	
+	<!-- 	allPrSearchSelect 페이징 처리 끝 -->
+	
+</mapper>

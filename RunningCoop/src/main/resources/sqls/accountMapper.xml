@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pm.rc.accountMapper">
+
+	<!-- 회원가입:아이디 중복 확인 -->
+	<select id="memIdSelect" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT MEM_ID
+		FROM RC_MEMBER
+		WHERE MEM_ID=#{mem_id}
+	</select>
+	
+	<!-- 회원가입:이메일 중복 확인 -->
+	<select id="memEmailSelect" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT MEM_EMAIL
+		FROM RC_MEMBER
+		WHERE MEM_EMAIL=#{mem_email}
+	</select>
+
+	<!-- 회원가입 등록 -->
+	<insert id="memInsert" parameterType="MemberDto">
+		INSERT INTO RC_MEMBER
+		(MEM_ID, MEM_PW, MEM_NAME, MEM_PHONE, MEM_EMAIL)
+		VALUES
+		(#{mem_id},
+		#{mem_pw}, #{mem_name}, #{mem_phone}, #{mem_email})
+	</insert>
+
+	<!-- 로그인 -->
+	<select id="loginPro" parameterType="java.util.Map" resultType="MemberDto">
+		SELECT MEM_ID, MEM_PW, MEM_NAME, MEM_LEVEL 
+		FROM RC_MEMBER
+		WHERE MEM_ID = #{mem_id}
+		AND MEM_PW = #{mem_pw} AND MEM_DELYN = 'N'
+	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="memIdSearch" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT MEM_ID
+  		FROM RC_MEMBER 
+  		WHERE MEM_NAME = #{mem_name} AND MEM_EMAIL = #{mem_email} AND MEM_DELYN = 'N'
+	</select>
+	
+	<!-- 비밀번호 찾기:본인확인 -->
+	<select id="memIdEmailChk" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM RC_MEMBER WHERE MEM_ID = #{mem_id} AND MEM_EMAIL=#{mem_email} AND MEM_DELYN = 'N'
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="memPwModify" parameterType="java.util.Map">
+		UPDATE RC_MEMBER SET MEM_PW = #{mem_pw} 
+ 		 WHERE MEM_ID = #{mem_id} AND MEM_DELYN = 'N'
+	</update>
+
+	<!-- 탙퇴하기 전 GM으로 소속된 그룹 조회 -->
+	<select id="levelGmSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT GM.GR_ID, G.GR_NAME, GM.GR_LEVEL FROM
+		RC_GROUPMEM GM,
+		RC_GROUP G
+		WHERE GM.GR_ID = G.GR_ID AND GM.MEM_ID = #{mem_id} AND
+		GM.GR_LEVEL = 'GM' AND G.GR_DELYN = 'N'
+	</select>
+	
+	<!-- 탙퇴하기 전 PM으로 소속된 프로젝트 조회 -->
+ 	<select id="levelPmSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		<![CDATA[SELECT PM.PR_ID, P.PR_NAME, PM.PR_LEVEL, GP.GR_ID FROM RC_PROMEM PM, RC_PROJECT P, RC_GRPRO GP
+		WHERE PM.PR_ID = P.PR_ID 
+		AND PM.MEM_ID = #{mem_id} 
+		AND P.PR_ID = GP.PR_ID 
+		AND PM.PR_LEVEL = 'PM' 
+		AND P.PR_CONDITION <> 'C'
+		AND P.PR_DELYN = 'N'
+		]]>
+	</select> 
+	
+	<!-- 그룹 프로젝트 탈퇴 처리 -->
+	<delete id="memDelete_1" parameterType="java.lang.String">
+		DELETE FROM RC_PROMEM
+		WHERE MEM_ID = #{mem_id}
+	</delete>
+	
+	<!-- 프로젝트 멤버 수 조정 -->
+	<update id="memDelete_2" parameterType="java.lang.String">
+		UPDATE RC_PROJECT P SET P.PR_MEMCNT = (SELECT COUNT(*) FROM RC_PROMEM PM WHERE P.PR_ID = PM.PR_ID)
+	</update>
+	
+	<!-- 그룹 탈퇴 처리 -->
+	<delete id="memDelete_3" parameterType="java.lang.String">
+		DELETE FROM RC_GROUPMEM GM
+		WHERE GM.MEM_ID = #{mem_id} AND GM.GR_ID IN (SELECT GR_ID FROM RC_GROUPMEM WHERE MEM_ID = #{mem_id})
+	</delete>
+	
+	<!-- 그룹 멤버수 조정 -->
+	<update id="memDelete_4">
+		UPDATE RC_GROUP G SET G.GR_MEMCNT = (SELECT COUNT(*) FROM RC_GROUPMEM GM WHERE GM.GR_ID = G.GR_ID)
+	</update>
+	
+	<!-- 개인프로젝트 비활성화 -->
+	<update id="memDelete_5" parameterType="java.lang.String">
+		UPDATE RC_PROJECT P SET PR_SEARCHYN = 'N' 
+		WHERE P.PR_ID IN(SELECT PM.PR_ID FROM RC_PROMEM PM WHERE PM.MEM_ID = #{mem_id})
+	</update>
+	
+	<!-- 개인 프로젝트 관계테이블 컬럼 삭제 -->
+	<delete id="memDelete_6" parameterType="java.lang.String">
+		DELETE FROM RC_PROMEM 
+		WHERE MEM_ID = #{mem_id} AND PR_LEVEL = 'PM'
+	</delete>
+	
+	<!-- 개인 프로젝트 인원 조정: memDelete_2와 동일 -->
+	
+	<!-- 그룹 가입신청리스트에서 데이터 제거 -->
+	<delete id="memDelete_7">
+		DELETE FROM RC_GRWAIT WHERE MEM_ID = #{mem_id}
+	</delete>
+	
+	<!-- 회원 비활성화 -->
+	<update id="memDelete_8">
+		UPDATE RC_MEMBER SET MEM_DELYN = 'Y'
+		WHERE MEM_ID = #{mem_id}
+	</update>
+	
+	<!-- 회원정보 출력 -->
+	<select id="memSelect" parameterType="java.lang.String" resultType="MemberDto">
+		SELECT MEM_ID, MEM_PW, MEM_NAME, MEM_EMAIL, MEM_PHONE 
+ 		FROM RC_MEMBER
+		WHERE MEM_ID = #{mem_id} AND MEM_DELYN = 'N'
+	</select>
+	
+	<!-- 회원정보 수정을 위한 비밀번호 확인 -->
+	<select id="memPwSelect" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT MEM_PW 
+ 		FROM RC_MEMBER
+		WHERE MEM_ID = #{mem_id} AND MEM_DELYN = 'N'
+	</select>
+	
+	<!-- 회원정보 수정 -->
+	<update id="memInfoModify" parameterType="MemberDto">
+		UPDATE RC_MEMBER SET MEM_NAME = #{mem_name}, MEM_PW = #{mem_pw}, MEM_EMAIL = #{mem_email}, MEM_PHONE = #{mem_phone}
+		WHERE MEM_ID = #{mem_id}
+	</update>
+	
+</mapper>

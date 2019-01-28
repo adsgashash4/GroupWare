@@ -1,0 +1,19 @@
+@import url(admin/admin_grApply.css);
+@import url(admin/admin_sysBoard.css);
+@import url(admin/admin_Login.css);
+@import url(admin/admin_memMgr.css);
+
+body {
+	overflow: auto;
+	padding : 0;
+}
+
+#sys_container {
+	position : absolute;
+	top : 50px;
+	left : 200px;
+	padding : 5px;
+	width : 1000px;
+	text-align: center;
+	overflow: hidden;
+}

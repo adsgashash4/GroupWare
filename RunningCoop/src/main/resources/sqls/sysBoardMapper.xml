@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pm.rc.sysBoard">
+	
+	<!-- 공지게시판 페이징 처리 시작 -->
+	<select id="noticeListSelect" parameterType="SystemBoardDto" resultType="java.util.Map">
+		SELECT * FROM 
+			(SELECT ROWNUM RNUMBER, R.* FROM (
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT SB.SBR_UUID, SB.SBR_TITLE, M.MEM_NAME, TO_CHAR(SB.SBR_REGDATE, 'YYYY/MM/DD') SBR_REGDATE,
+						SB.SBR_SCRYN, SBR_STEP
+						FROM RC_SYSBOARD SB, RC_MEMBER M
+						WHERE SB.MEM_ID = M.MEM_ID AND SBR_DELYN = 'N' AND SBR_NOTICEYN = 'Y'
+						<if test="sbr_title != null">
+							AND SB.SBR_TITLE LIKE '%${sbr_title}%'
+						</if>
+						ORDER BY SBR_REFER, SBR_STEP DESC
+				  	) P
+				ORDER BY RNUM DESC) R)
+			)
+		WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}
+	</select>
+
+	<select id="noticeListSelectCount" parameterType="SystemBoardDto" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*),0)
+			FROM RC_SYSBOARD SB, RC_MEMBER M
+			WHERE SB.MEM_ID = M.MEM_ID
+			AND SB.SBR_NOTICEYN = 'Y' AND SB.SBR_DELYN = 'N'
+			<if test="sbr_title != null">
+			AND SB.SBR_TITLE LIKE '%${sbr_title}%'
+			</if>
+	</select>
+	<!-- 공지게시판 페이징 처리 끝 -->
+
+	<!-- 문의게시판 목록 페이징 처리 시작  -->
+	<!-- 문의 게시글 목록 출력 -->
+	<select id="qnaListSelect" parameterType="SystemBoardDto" resultType="java.util.Map">
+		SELECT * FROM 
+			(SELECT ROWNUM RNUMBER, R.* FROM (
+				(SELECT ROWNUM RNUM, P.* FROM
+					(SELECT SB.SBR_UUID, SB.SBR_TITLE, M.MEM_NAME, TO_CHAR(SB.SBR_REGDATE, 'YYYY/MM/DD') SBR_REGDATE,
+						SB.SBR_SCRYN, SBR_STEP
+						FROM RC_SYSBOARD SB, RC_MEMBER M
+						WHERE SB.MEM_ID = M.MEM_ID AND SBR_DELYN = 'N' AND SBR_NOTICEYN = 'N'
+						<if test="sbr_title != null">
+							AND SB.SBR_TITLE LIKE '%${sbr_title}%'
+						</if>
+						ORDER BY SBR_REFER, SBR_STEP DESC
+				  	) P
+				ORDER BY RNUM DESC) R)
+			)
+		WHERE RNUMBER BETWEEN #{paging.start} AND #{paging.last}
+	</select>
+	
+	<select id="qnaListSelectCount" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM RC_SYSBOARD SB, RC_MEMBER M
+		WHERE SB.MEM_ID = M.MEM_ID AND SBR_DELYN = 'N' AND SBR_NOTICEYN = 'N'
+		<if test="sbr_title != null">
+			AND SB.SBR_TITLE LIKE '%${sbr_title}%'
+		</if>
+	</select>
+	<!-- 문의게시판 페이징 처리 끝 -->
+
+	<!-- 공개 게시글 보기 -->
+	<select id="openViewSelect" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		SELECT SB.SBR_UUID, SB.MEM_ID, M.MEM_NAME, TO_CHAR(SB.SBR_REGDATE,
+		'YYYY/MM/DD') SBR_REGDATE, SB.SBR_TITLE, SB.SBR_CONTENT, SB.SBR_REFER
+		FROM RC_SYSBOARD SB, RC_MEMBER M
+		WHERE M.MEM_ID = SB.MEM_ID AND
+		SBR_UUID = #{sbr_uuid}
+	</select>
+
+	<!-- 비밀 게시글 보기 -->
+	<select id="scrViewSelect" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT SB.SBR_UUID, SB.MEM_ID, M.MEM_NAME, TO_CHAR(SB.SBR_REGDATE,
+		'YYYY/MM/DD') SBR_REGDATE, SB.SBR_TITLE, SB.SBR_CONTENT, SB.SBR_REFER
+		FROM RC_MEMBER M, RC_SYSBOARD SB
+		WHERE M.MEM_ID = SB.MEM_ID AND SB.SBR_SCRYN = 'Y' AND SB.SBR_UUID = #{sbr_uuid} AND SB.SBR_PW = #{sbr_pw}
+	</select>
+	
+	<!-- 수정용 게시글 화면 -->
+	<select id="editViewSelect" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT SB.SBR_UUID, SB.MEM_ID, M.MEM_NAME, TO_CHAR(SB.SBR_REGDATE, 'YYYY/MM/DD') SBR_REGDATE,
+		SB.SBR_TITLE, SB.SBR_CONTENT, SB.SBR_SCRYN, SB.SBR_PW
+		FROM RC_MEMBER M, RC_SYSBOARD SB
+		WHERE M.MEM_ID = SB.MEM_ID AND SB.SBR_UUID = #{sbr_uuid}
+	</select>
+	
+	<!-- 게시글 첨부파일 보기 -->
+	<select id="sysAttachSelect" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT SA.SATT_SEQ, SA.SATT_NAME, SA.SATT_SIZE, SA.SATT_RNAME, SA.SATT_PATH FROM RC_SYSATTACH SA
+		WHERE SA.SBR_UUID = #{sbr_uuid}
+	</select>
+
+	<!-- 문의게시판 글 작성 -->
+	<insert id="qnaBoardInsert" parameterType="java.util.Map">
+		INSERT INTO
+		RC_SYSBOARD
+		(SBR_UUID, MEM_ID, SBR_TITLE, SBR_CONTENT, SBR_SCRYN,
+		SBR_PW, SBR_NOTICEYN, SBR_REFER, SBR_REGDATE)
+		VALUES
+		(#{sbr_uuid},
+		#{mem_id}, #{sbr_title}, #{sbr_content}, #{sbr_scryn}, #{sbr_pw}, 'N',
+		(SELECT NVL(MAX(SBR_REFER)+1, 1) FROM RC_SYSBOARD)
+		, SYSDATE)
+	</insert>
+	
+	<!-- 공지/문의 게시판 수정 -->
+	<update id="sysBoardUpdate" parameterType="java.util.Map">
+		UPDATE RC_SYSBOARD 
+		SET SBR_TITLE = #{sbr_title}, SBR_CONTENT = #{sbr_content}, SBR_SCRYN = #{sbr_scryn}, SBR_PW = #{sbr_pw}
+		WHERE SBR_UUID = #{sbr_uuid}
+	</update>
+	
+	<!-- 첨부파일 등록 -->
+	<insert id="FileInsert" parameterType="java.util.Map">
+		INSERT INTO RC_SYSATTACH (SATT_SEQ, SBR_UUID, SATT_NAME, SATT_SIZE, SATT_RNAME, SATT_PATH)
+			VALUES
+		(SYSATTACH_SEQ.NEXTVAL, #{sbr_uuid}, #{satt_name}, #{satt_size}, #{satt_rname}, #{satt_path})
+	</insert>
+	
+	<!-- 첨부파일 수정 -->
+	<update id="fileUpdate" parameterType="java.util.Map">
+		UPDATE RC_SYSATTACH
+		SET SATT_NAME = #{satt_name}, SATT_RNAME = #{satt_rname}, SATT_SIZE = #{satt_size}, SATT_PATH = #{satt_path}
+		WHERE SBR_UUID = #{sbr_uuid}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<update id="sysBoardDelete" parameterType="java.lang.String">
+		UPDATE RC_SYSBOARD SET SBR_DELYN = 'Y'
+		WHERE SBR_UUID = #{ sbr_uuid }
+	</update>
+	
+	<!-- 첨부파일 삭제 -->
+	<delete id="sysAttachDelete" parameterType="java.lang.String">
+		DELETE FROM RC_SYSATTACH
+ 		WHERE SBR_UUID = #{ sbr_uuid }
+	</delete>
+
+</mapper>

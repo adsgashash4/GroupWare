@@ -1,0 +1,181 @@
+@CHARSET "UTF-8";
+	.mainHeader{
+		width: 100%;
+		height: 15%;
+		text-align: center;
+		margin-top: 80px;
+	}
+	
+	.mainContain{
+		width: 100%;
+		text-align: center;
+	}
+	
+	.accountBox{
+		width: 350px;
+		height: 240px;
+		border: 0.5px solid #B4B4B4; 
+		margin: auto;
+		padding: 20px;
+	}
+	
+	.login{
+		height: 130px;
+	}
+	
+	.enter{
+		height: 50px;
+	}
+	
+	.id, .pw{
+		width: 300px;
+		height: 40px;
+		background: #EAEAEA;
+		border: 2px solid transparent;
+		transition: border .5s;
+		border-radius: 4px;
+		text-align: center;
+		font-size: 14pt;
+		font-weight: bolder;
+		color: gray;
+	}
+	
+	.id{
+		margin-top: 8pt;
+		margin-bottom: 4pt;
+	}
+	
+	.pw{
+		margin-top: 4pt;
+	}
+	
+	.id:focus, .pw:focus {
+		border: 2px solid #69B55B;
+		box-shadow: none;
+	}
+	
+	.accountBtn{
+		width: 80px;
+		height: 20px;
+   		padding: 2px;
+		margin: auto;
+		color: #9E9E9E;
+	    font-size: 12px;
+	    background-color: white;
+	    border: 0.5px solid #9E9E9E;
+	    text-align: center;
+   		cursor: pointer;
+	}
+	
+	.searchAccount{
+		display: none;
+		background: white;
+	}
+	
+	.join_modal{
+		display: none; /* Hidden by default */
+	    position: fixed; /* Stay in place */
+	    z-index: 1; /* Sit on top */
+	    left: 0;
+	    top: 0;
+	    width: 100%; /* Full width */
+	    height: 100%; /* Full height */
+	    overflow: auto; /* Enable scroll if needed */
+	    background-color: rgb(0,0,0); /* Fallback color */
+	    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+ 	
+	.joinModal_content{
+		position: relative;
+	    top: 5%;
+	    background-color: #f5f6f7;
+	    margin: auto;
+	    padding: 0;
+	    border: 1px solid #888;
+	    width: 40%;
+	    min-width: 350px;
+	    height: 500px;
+	    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	    -webkit-animation-name: animatetop;
+	    -webkit-animation-duration: 0.4s;
+	    animation-name: animatetop;
+	    animation-duration: 0.4s
+	}
+	
+	.joinModal_header{
+		text-align: center;
+		padding: 7px;
+	    background-color: #5cb85c;
+	    color: white;
+	}
+	
+	.joinModal_header img {
+		width: 25px;
+		height: 25px;
+		float: right;
+	}
+	
+	.joinModal_body{
+		height: 90%;
+	    margin: auto;
+	    padding: 20px;
+	}
+	
+	.joinField{
+		border: 0;
+	}
+	
+	.rowGroup{
+		zoom: 1;
+	    margin-bottom: 10px;
+	    border: solid 1px #dadada;
+	    background: #fff;
+	}
+	
+	.join_row:FIRST-CHILD{
+		border-top: none;
+	}
+	
+	.join_row{
+		box-sizing: border-box;
+	    padding: 11px 11px 11px 13px;
+	    background: #fff;	
+	    border-bottom: solid 1px #dadada;
+	}
+	
+	.join_row:eq(last){
+		border-bottom: none;
+	}
+		
+	.ps_box .int_id{
+		background-position: 100% -57px;
+	}
+	
+	.int_id{
+		overflow: auto;
+	}
+	
+	.ps_box{
+		position: relative;
+	    display: block;
+	    height: 27px;
+	    background: #fff;
+	}
+	
+	.join_row .int{
+		font-size: 12px;
+	    position: relative;
+	    z-index: 10;
+	    height: 17px;
+	    padding: 6px 0;
+	    border: none;
+	    background: #fff;
+	}
+	
+	.join_row .int{
+		width: 100%;
+	}
+	
+	.int:focus{
+		outline: none;
+	}

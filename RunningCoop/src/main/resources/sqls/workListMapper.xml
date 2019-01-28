@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pm.rc.worklist">
+
+	<select id="wkListSelect1" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT W.WK_ID, W.WK_TITLE, M.MEM_ID, M.MEM_NAME, W.WK_PRORATE, TO_CHAR(W.WK_ENDDATE, 'YYYY-MM-DD') WK_ENDDATE
+		FROM RC_WORKLIST W, RC_MEMBER M
+		WHERE W.MEM_ID = M.MEM_ID AND W.WK_PRORATE = '0' AND W.WK_DELYN = 'N' AND W.PR_ID = #{pr_id}
+	</select>
+	
+	<select id="wkListSelect2" parameterType="java.util.Map" resultType="java.util.Map">
+		<![CDATA[
+			SELECT W.WK_ID, W.WK_TITLE, M.MEM_ID, M.MEM_NAME, W.WK_PRORATE, TO_CHAR(W.WK_ENDDATE, 'YYYY-MM-DD') WK_ENDDATE
+			FROM RC_WORKLIST W, RC_MEMBER M
+			WHERE W.MEM_ID = M.MEM_ID AND W.WK_PRORATE > '0' AND W.WK_PRORATE < '100' AND W.WK_DELYN = 'N' AND W.PR_ID = #{pr_id}
+		]]>
+		
+	</select>
+	
+	<select id="wkListSelect3" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT W.WK_ID, W.WK_TITLE, M.MEM_ID, M.MEM_NAME, W.WK_PRORATE, TO_CHAR(W.WK_ENDDATE, 'YYYY-MM-DD') WK_ENDDATE
+		FROM RC_WORKLIST W, RC_MEMBER M
+		WHERE W.MEM_ID = M.MEM_ID AND W.WK_PRORATE = '100' AND W.WK_DELYN = 'N' AND W.PR_ID = #{pr_id}
+	</select>
+	
+	<select id="wdSelect" parameterType="java.lang.String" resultType="WorkDetailDto">
+		SELECT WK_ID, WD_ID, WD_TITLE, WD_ERRORYN, TO_CHAR (WD_ENDDATE, 'YYYY-MM-DD') WD_ENDDATE, WD_COMPLYN
+  		FROM RC_WORKDETAIL
+  		WHERE WK_ID = #{wk_id} AND WD_DELYN = 'N'
+  		ORDER BY WD_ENDDATE
+	</select>
+	
+	<select id="wdComplSelect" parameterType="java.lang.String" resultType="WorkDetailDto">
+		SELECT WK_ID, WD_ID, WD_TITLE, WD_ERRORYN, TO_CHAR (WD_ENDDATE, 'YYYY-MM-DD') WD_ENDDATE, WD_COMPLYN
+  		FROM RC_WORKDETAIL
+  		WHERE WK_ID = #{wk_id} AND WD_DELYN = 'N' AND WD_COMPLYN = 'Y'
+	</select>
+	
+	<insert id="wdInsert" parameterType="WorkDetailDto">
+		INSERT INTO RC_WORKDETAIL (WD_ID, WD_TITLE, WD_ENDDATE, WK_ID, WD_REGDATE)
+   		VALUES 
+ 	    (#{wd_id} , #{wd_title}, TO_DATE (#{wd_endDate}, 'YYYY-MM-DD'), #{wk_id}, SYSDATE)
+	</insert>
+	
+	<update id="wdModify" parameterType="WorkDetailDto">
+		UPDATE RC_WORKDETAIL SET WD_TITLE = #{wd_title}, WD_ENDDATE = TO_DATE(#{wd_endDate}, 'YYYY-MM-DD')
+  		WHERE WD_ID = #{wd_id}
+	</update>
+	
+	<update id="wdComplModify" parameterType="java.lang.String">
+		UPDATE RC_WORKDETAIL SET WD_COMPLYN = 'Y'
+  		WHERE WD_ID = #{wd_id}
+	</update>
+	
+	<update id="wdErrorChk" parameterType="java.util.Map">
+		UPDATE RC_WORKDETAIL SET WD_ERRORYN = #{wd_erroryn}
+ 		WHERE WD_ID = #{wd_id}
+	</update>
+	
+	<update id="wdDelete" parameterType="java.lang.String">
+		UPDATE RC_WORKDETAIL SET WD_DELYN = 'Y' 
+  		WHERE WD_ID = #{wd_id}
+  	</update>
+  	
+  	<update id="wkProRateEdit" parameterType="java.util.Map">
+  		UPDATE RC_WORKLIST SET WK_PRORATE = #{wk_proRate}
+  		WHERE WK_ID = #{wk_id}
+  	</update>
+  	
+  	<update id="wkListModify" parameterType="WorkListDto">
+  		UPDATE RC_WORKLIST SET WK_TITLE = #{wk_title}, MEM_ID = #{mem_id}, WK_ENDDATE = TO_DATE(#{wk_endDate}, 'YYYY-MM-DD')
+  		WHERE WK_ID = #{wk_id}
+  	</update>
+  	
+  	<insert id="wkListInsert" parameterType="WorkListDto">
+  		INSERT INTO RC_WORKLIST (WK_ID, WK_TITLE, MEM_ID, WK_ENDDATE, PR_ID)
+    	VALUES 
+     	(#{wk_id}, #{wk_title}, #{mem_id}, TO_DATE (#{wk_endDate}, 'YYYY-MM-DD'), #{pr_id})
+  	</insert>
+  	
+  	<update id="wkListDelete_1" parameterType="java.lang.String">
+  		UPDATE RC_WORKDETAIL SET WD_DELYN = 'Y'
+  		WHERE WK_ID = #{wk_id}
+  	</update>
+  	
+  	<update id="wkListDelete_2" parameterType="java.lang.String">
+  		UPDATE RC_WORKLIST SET WK_DELYN = 'Y'
+  		WHERE WK_ID = #{wk_id}
+  	</update>
+  	
+  	<select id="wCommListSelect" parameterType="java.lang.String" resultType="java.util.Map">
+  		SELECT C.WCOM_ID, C.WCOM_CONTENT, M.MEM_ID, M.MEM_NAME, TO_CHAR(C.WCOM_REGDATE, 'YYYY/MM/DD') WCOM_REGDATE
+  		FROM RC_WORKCOMMENT C, RC_MEMBER M
+  		WHERE WK_ID = #{wk_id} AND C.MEM_ID = M.MEM_ID AND WCOM_DELYN = 'N'
+  		ORDER BY WCOM_REGDATE DESC
+  	</select>
+  	
+  	<insert id="wCommentInsert" parameterType="WorkCommentDto">
+  		INSERT INTO RC_WORKCOMMENT (WCOM_ID, WK_ID, MEM_ID, WCOM_CONTENT)
+		VALUES
+		(#{wcom_id}, #{wk_id}, #{mem_id}, #{wcom_content})
+  	</insert>
+  	
+  	<update id="wCommentModify" parameterType="WorkCommentDto">
+  		UPDATE RC_WORKCOMMENT SET WCOM_CONTENT = #{wcom_content}
+  		WHERE WCOM_ID = #{wcom_id}
+  	</update>
+  	
+  	<update id="wCommentDelete" parameterType="java.lang.String">
+  		UPDATE RC_WORKCOMMENT SET WCOM_DELYN = 'Y'
+  		WHERE WCOM_ID = #{wcom_id}
+  	</update>
+  	
+  	<select id="gbAttachSelect" parameterType="java.lang.String" resultType="GbAttachDto">
+  		SELECT PA.GATT_SEQ, PA.GATT_NAME, PA.GATT_SIZE, TO_CHAR(PA.GATT_REGDATE, 'YYYY/MM/DD') GATT_REGDATE
+  		FROM RC_GNPATTACH PA
+  		WHERE PA.WK_ID = #{wk_id}
+  	</select>
+  	
+  	<insert id="gbAttachInsert" parameterType="GbAttachDto">
+  		INSERT INTO RC_GNPATTACH (GATT_SEQ, GATT_NAME, GATT_SIZE, GATT_PATH, GATT_RNAME, WK_ID)
+		VALUES
+		(GNPATTACH_SEQ.NEXTVAL, #{gatt_name}, #{gatt_size}, #{gatt_path}, #{gatt_rname}, #{wk_id})
+  	</insert>
+  	
+  	<select id="attachDownSelect" parameterType="java.lang.String" resultType="GbAttachDto">
+  		SELECT GATT_NAME, GATT_RNAME, GATT_PATH
+  		FROM RC_GNPATTACH
+  		WHERE GATT_SEQ = #{gatt_seq}
+  	</select>
+  	
+  	<delete id="gbAttachDelete" parameterType="java.lang.String">
+  		DELETE FROM RC_GNPATTACH
+  		WHERE GATT_SEQ = #{gatt_seq}
+  	</delete>
+
+	
+</mapper>

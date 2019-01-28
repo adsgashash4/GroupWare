@@ -1,0 +1,102 @@
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+#footer{
+	position: fixed;
+    right: 0;
+    top: 50px;
+    width: 20%;
+    min-width: 140px;
+    height: 100%;
+    background: #69B55B;
+    color: white;
+}
+
+.sidebar_list{
+	margin : 0px;
+	padding : 0px;
+	list-style: none;
+	text-align: left;
+}
+
+.footer-menu{
+	width : 100%;
+	height : 40px;
+	
+	margin : 0px;
+	padding-top : 5px;
+	padding-bottom : 5px;
+	line-height : 40px;
+	
+	background : #69B55B;
+}
+
+.footer-menu:HOVER{
+	background : #E6F4B5;
+}
+
+.bottom-menu{
+	width : 100%;
+	margin-bottom : 10px;
+	margin-left: 30px;
+}
+
+.group-menu{
+	width : 100%;
+	height : 30px;
+	margin-bottom : 10px;
+	margin-left: 30px;
+}
+
+.top_menu{
+	font-size : 16pt;
+	color: white;
+	text-decoration: none;
+	margin-left: 25px;
+	
+	font-family: Noto Sans KR;
+	font-weight: bold;
+}
+
+.iProject {
+	list-style: none;
+    line-height: 18px;
+    padding-left: 10px;
+}
+
+.iProject a{
+	text-decoration: none;
+	color : white;
+    font-size: 10pt;
+}
+
+.iProject li:HOVER {
+    text-decoration: underline;
+}
+
+.iProject span{
+	color: green;
+    font-weight: bold;
+    font-size: 10pt;
+    vertical-align: baseline;
+}
+
+.groupMenu {
+	list-style: none;
+    line-height: 18px;
+    padding-left: 10px;
+    font-size : 10pt;
+}
+
+.groupMenu a{
+	color : white;
+	text-decoration: none;
+}
+
+.groupMenu a:HOVER {
+    text-decoration: underline;
+}
+
+.searchbox {
+	width : 150px;
+	margin-left: 10px;
+}

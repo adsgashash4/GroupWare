@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+    <head>
+    	<w2:type>DEFAULT</w2:type>
+        <w2:buildDate/>
+        <xf:model>
+        	<xf:instance>
+        		<data xmlns="" />
+        	</xf:instance>
+        	<w2:dataCollection baseNode="map">
+        		<w2:dataList baseNode="list" repeatNode="map"
+        			id="dc_noticePostList" saveRemovedData="true">
+        			<w2:columnInfo>
+        				<w2:column id="SBR_UUID" name="SBR_UUID"
+        					dataType="text">
+        				</w2:column>
+        				<w2:column id="MEM_NAME" name="작성자"
+        					dataType="text">
+        				</w2:column>
+        				<w2:column id="SBR_TITLE" name="제목"
+        					dataType="text">
+        				</w2:column>
+        				<w2:column id="SBR_CONTENT" name="SBR_CONTENT"
+        					dataType="text">
+        				</w2:column>
+        				<w2:column id="SBR_REFER" name="SBR_REFER"
+        					dataType="number">
+        				</w2:column>
+        				<w2:column id="SBR_STEP" name="SBR_STEP"
+        					dataType="number">
+        				</w2:column>
+        				<w2:column id="SBR_DEPTH" name="SBR_DEPTH"
+        					dataType="number">
+        				</w2:column>
+        				<w2:column id="SBR_SCRYN" name="SBR_SCRYN"
+        					dataType="text">
+        				</w2:column>
+        				<w2:column id="SBR_PW" name="SBR_PW"
+        					dataType="text">
+        				</w2:column>
+        				<w2:column id="SBR_NOTICEYN" name="SBR_NOTICEYN"
+        					dataType="text">
+        				</w2:column>
+        				<w2:column id="SBR_REGDATE" name="작성일"
+        					dataType="text">
+        				</w2:column>
+        			</w2:columnInfo>
+        			<w2:data>
+        			</w2:data>
+        		</w2:dataList>
+        		<w2:dataMap baseNode="map" repeatNode="map"
+        			id="dc_noticePostParam" saveRemovedData="true">
+        			<w2:keyInfo>
+        				<w2:key id="sbr_title" name="게시글제목"
+        					dataType="number">
+        				</w2:key>
+        				<w2:key id="index" name="페이지번호"
+        					dataType="number">
+        				</w2:key>
+        				<w2:key id="listCnt" name="게시글수"
+        					dataType="number">
+        				</w2:key>
+        				<w2:key id="pageCnt" name="페이지수"
+        					dataType="number">
+        				</w2:key>
+        				<w2:key id="pageStartNum" name="시작게시글번호"
+        					dataType="number">
+        				</w2:key>
+        			</w2:keyInfo>
+        			<w2:data use="true">
+        				<sbr_title></sbr_title>
+        				<index><![CDATA[0]]></index>
+        				<listCnt></listCnt>
+        				<pageCnt></pageCnt>
+        				<pageStartNum><![CDATA[1]]></pageStartNum>
+        			</w2:data>
+        		</w2:dataMap>
+        		<w2:dataMap baseNode="map" id="dc_paging">
+        			<w2:keyInfo>
+        				<w2:key id="pageCnt" name="페이지번호개수"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="index" name="페이지번호" dataType=""></w2:key>
+        				<w2:key id="pageStartNum" name="페이지시작번호"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="listCnt" name="출력할리스트개수"
+        					dataType="text">
+        				</w2:key>
+        				<w2:key id="total" name="리스트총개수" dataType=""></w2:key>
+        				<w2:key id="pageLastNum" name="마지막 페이지번호"
+        					dataType="text">
+        				</w2:key>
+        			</w2:keyInfo>
+        			<w2:data use="false">
+        				<pageCnt></pageCnt>
+        				<index><![CDATA[0]]></index>
+        				<pageStartNum><![CDATA[]]></pageStartNum>
+        				<listCnt></listCnt>
+        				<total></total>
+        				<pageLastNum><![CDATA[1]]></pageLastNum>
+        			</w2:data>
+        		</w2:dataMap>
+        	</w2:dataCollection>
+        	<w2:workflowCollection></w2:workflowCollection>
+        	<xf:submission id="notice_select"
+        		ref="data:json,dc_noticePostParam"
+        		target='data:json,[{"id":"dc_noticePostList","key":"result1"},{"id":"dc_paging","key":"result2"}]'
+        		action="/RunningCoop/sysNoticeMgr.do" method="post" mediatype="application/json"
+        		encoding="UTF-8" instance="" replace="" errorHandler=""
+        		customHandler="" mode="asynchronous" processMsg="데이터 조회중"
+        		ev:submit="scwin.notice_select_submit" ev:submitdone="scwin.notice_select_submitdone" ev:submiterror="">
+        	</xf:submission>
+        </xf:model>
+        <script type="text/javascript"><![CDATA[
+	scwin.init = function(){
+		//데이터 조회
+		scwin.selectNoticeList();
+	}
+	
+	//submission 실행
+	scwin.selectNoticeList = function(){
+		$w.executeSubmission( "notice_select" );
+	};
+	
+	//sbm_select 실행 후
+	scwin.notice_select_submitdone = function(e) {
+		scwin.setPageInfo();
+	};
+	
+	//PageList의 페이지 정보 셋팅
+	scwin.setPageInfo = function(){
+		var pageSize = dc_paging.get( "pageLastNum" );
+		pgl_notice.setCount( pageSize , true );
+	}
+	
+	scwin.pgl_notice_onviewchange = function(info) {
+		var newIndex = info.newSelectedIndex;
+		var startNum = dc_paging.get("pageStartNum");
+		dc_noticePostParam.set("index", (newIndex-1)+"");
+		dc_noticePostParam.set("pageStartNum", startNum+"");
+		scwin.selectNoticeList();
+	};
+	]]></script>
+    </head>
+    <body>
+    	<xf:group style="padding: 10px;" id="" class="">
+    		<xf:group style="padding-bottom: 30px;" id="" class="">
+    			<w2:textbox label="공지게시판"
+    				style="width: 150px;height: 23px;font-size:13pt;" id="">
+    			</w2:textbox>
+    		</xf:group>
+    		<xf:group style="margin-bottom: 40px;" id="" class="">
+    			<xf:input id=""
+    				style="width: 144px;height: 21px;margin-right: 10px;"
+    				ref="data:dc_noticePostParam.sbr_title">
+    			</xf:input>
+    			<xf:trigger type="button"
+    				style="width: 80px;height: 23px;" id="">
+    				<xf:label><![CDATA[검색]]></xf:label>
+    			</xf:trigger>
+    			<xf:select1 selectedData="true" submenuSize="auto"
+    				allOption="" optionOrder="false" disabled="false" id=""
+    				direction="auto" chooseOption="" displayMode="label"
+    				appearance="minimal" disabledClass="w2selectbox_disabled"
+    				style="width: 148px;height: 21px;float : right;"
+    				ref="data:dc_noticePostParam.listCnt">
+    				<xf:choices>
+    					<xf:item>
+    						<xf:label><![CDATA[5건씩 조회]]></xf:label>
+    						<xf:value><![CDATA[5]]></xf:value>
+    					</xf:item>
+    					<xf:item>
+    						<xf:label><![CDATA[10건씩 조회]]></xf:label>
+    						<xf:value><![CDATA[10]]></xf:value>
+    					</xf:item>
+    					<xf:item>
+    						<xf:label><![CDATA[15건씩 조회]]></xf:label>
+    						<xf:value><![CDATA[15]]></xf:value>
+    					</xf:item>
+    				</xf:choices>
+    			</xf:select1>
+    		</xf:group>
+    		<xf:group style="margin-bottom: 20px;" id="" class="">
+    			<w2:gridView id="grv_notice"
+    				ignoreToggleOnDisabled="false" useShiftKey="true"
+    				style="height: 100px;" useFilterList="false"
+    				scrollByColumn="false" scrollByColumnAdaptive="false"
+    				summaryAuto="false" fixedColumnWithHidden="true"
+    				summaryOnlyAuto="false" dataList="dc_noticePostList"
+    				ignoreCellClick="false" visibleRowNum="10">
+    				<w2:caption style="" id="caption1"
+    					value="this is a grid caption.">
+    				</w2:caption>
+    				<w2:header style="" id="header1">
+    					<w2:row style="" id="row1">
+    						<w2:column width="420" inputType="text"
+    							style="height:20px" id="column17" blockSelect="false"
+    							displayMode="label" value="SBR_UUID">
+    						</w2:column>
+    						<w2:column width="116" inputType="text"
+    							style="height:20px" id="column19" blockSelect="false"
+    							displayMode="label" value="작성자">
+    						</w2:column>
+    						<w2:column width="102" inputType="text"
+    							style="height:20px" id="column1" blockSelect="false"
+    							displayMode="label" value="제목">
+    						</w2:column>
+    					</w2:row>
+    				</w2:header>
+    				<w2:gBody style="" id="gBody1">
+    					<w2:row style="" id="row2">
+    						<w2:column width="420" inputType="text"
+    							style="height:20px" id="SBR_UUID" blockSelect="false"
+    							displayMode="label">
+    						</w2:column>
+    						<w2:column width="116" inputType="text"
+    							style="height:20px" id="MEM_NAME" blockSelect="false"
+    							displayMode="label">
+    						</w2:column>
+    						<w2:column width="102" inputType="text"
+    							style="height:20px" id="SBR_TITLE" blockSelect="false"
+    							displayMode="label">
+    						</w2:column>
+    					</w2:row>
+    				</w2:gBody>
+    			</w2:gridView>
+    		</xf:group>
+    		<xf:group style="" id="" class="">
+    			<w2:pageList pageSize="10" displayButtonType="display"
+    				id="pgl_notice" displayFormat="#" style=""
+    				ev:onviewchange="scwin.pgl_notice_onviewchange">
+    			</w2:pageList>
+    		</xf:group>
+    	</xf:group>
+    </body>
+</html>

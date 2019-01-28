@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>Running Coop</display-name>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+<!-- 	에러페이지 설정 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/views/errors/404.jsp</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/views/errors/404.jsp</location>
+	</error-page>
+	
+	<!-- 11. model(Mybatis) 설정 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/spring/appServlet/applicationContext.xml
+		</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+	<!-- 1.spring dispatcher 생성 -->
+	<servlet>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				/WEB-INF/spring/appServlet/Servlet-context.xml
+				/WEB-INF/spring/appServlet/aop-context.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- Map all requests to the DispatcherServlet for handling -->
+	<servlet-mapping>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>websquareDispatcher</servlet-name>
+		<servlet-class>websquare.http.DefaultRequestDispatcher</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>websquareDispatcher</servlet-name>
+		<url-pattern>*.wq</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- 6. 한글 인코딩 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 7. log처리(log4j.xml를 java resource에 추가) -->
+	
+	
+	<!-- 25. 화면의 로그를 체크하기 위한 filter(listener는 화면넘어갈때 자동실행, filter는 중간에 가로채서 실행) -->
+ 	<filter> 
+ 		<filter-name>logFilter</filter-name>
+ 		<filter-class>com.pm.rc.util.AccessLogFilter</filter-class>
+ 	</filter> 
+
+	<filter-mapping> 
+ 		<filter-name>logFilter</filter-name> 
+ 		<url-pattern>/*</url-pattern> 
+	</filter-mapping> 
+	
+	
+<!-- 에러코드가 뜰 경우 특정 페이지로 이동시키는 것 -->
+<!--  	<error-page>
+		<error-code>404</error-code>
+		<location>/main.do</location>
+	</error-page> -->
+
+</web-app>

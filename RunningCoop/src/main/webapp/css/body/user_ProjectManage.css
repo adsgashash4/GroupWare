@@ -1,0 +1,249 @@
+#backProject {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+}
+
+.backToProject_btn {
+    background: darkgreen;
+    color: white;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 3px 5px;
+}
+
+#con_body{
+    margin-bottom: 10px;
+}
+	
+.calendar_manage {
+    clear: both;
+    display: none;
+    padding-top: 25px;
+}
+	
+.project_manage_table {
+    width: 60%;
+    margin: 0 auto;
+    text-align: left;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+}
+
+.project_manage_table th{
+	background-color: #F8F8F8;
+    width: 30%;
+    padding-left: 20px;
+}
+
+.project_manage_table td {
+    text-align: left;
+    height: 30px;
+    padding-left: 20px;
+}
+
+.project_manage_table input[type=text] {
+   	width: 300px;
+    height: 80%;
+    font-size: 11pt;
+    text-align: center;
+}
+
+.project_manage_table input[type=date] {
+    width: 300px;
+    height: 80%;
+    font-size: 11pt;
+    font-weight: 600;
+    text-align: center;
+}
+
+.project_manage_table select {
+    width: 300px;
+    height: 80%;
+    font-size: 11pt;
+}
+
+.project_manage_table textarea {
+    width: 300px;
+    height: 100px;
+    resize: none;
+}
+
+.pr_info_edit_btn{
+	color: white;
+    padding: 1px 10px;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.pr_delete_btn{
+	color: white;
+    padding: 1px 10px;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.gPr_manage_btn {
+    width: 25%;
+    height: 40px;
+    float: left;
+    border: 0.3px solid #e4efd8;
+    background-color: #5cb85c;
+    color: white;
+    font-size: 15pt;
+    font-weight: bold;
+}
+
+.gPr_manage_btn:HOVER {
+    background-color: #e4efd8;
+    color: #317131;
+    font-size: 15pt;
+    font-weight: bold;
+}
+
+.info_manage {
+    padding-top: 25px;
+    width: 100%;
+    margin: auto;
+    clear: both;
+}
+
+.mem_manage {
+    display: none;
+    padding-top: 25px;
+    width: 100%;
+    margin: auto;
+    clear: both;
+}
+
+.member_manage_area {
+    clear: both;
+    margin: auto;
+    overflow: hidden;
+    width: 100%;
+}
+
+.mem_manage_list {
+    width: 300px;
+    height: 400px;
+    border: 0.5px solid #C8C8C8;
+    float: left;
+    margin-left: 10%;
+}
+
+.mem_manage_list div:first-child {
+    border-bottom: 0.5px solid #C8C8C8;
+    height: 40px;
+    line-height: 40px;
+}
+
+.mem_list {
+    height: 80%;
+    text-align: left;
+    padding-left: 15px;
+    padding-top: 10px;
+    overflow: auto;
+}
+
+.pro_mem_con input[type=button] {
+    width: 45%;
+    margin: 0;
+    background: darkgreen;
+    border: 0.5px solid green;
+    border-radius: 5px;
+    padding: 3px 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.pro_mem_con input[type="button"]:HOVER {
+    cursor: pointer;
+    box-shadow: 1px 1px 5px grey;
+}
+
+.mem_invite_list {
+    border: 0.5px solid #C8C8C8;
+    width: 300px;
+    height: 400px;
+    float: left;
+    margin-left: 20px;
+    overflow: auto;
+}
+
+.mem_invite_list div:first-child {
+    height: 40px;
+    border-bottom: 0.5px solid #C8C8C8;
+    line-height: 40px;
+}
+
+#invitable_Memlist {
+    padding-top: 10px;
+    padding-left: 15px;
+    overflow: auto;
+}
+
+.mem_info_table {
+    margin: auto;
+    width: 90%;
+    text-align: left;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+
+.mem_info_table th {
+    background: #F8F8F8;
+    padding-left: 10px;
+}
+
+.mem_info_table td {
+    text-align: left;
+    padding: 10px;
+    font-size: 11pt;
+}
+
+#memInfo_mem_project a {
+    text-decoration: none;
+}
+
+#memInfo_mem_project a:HOVER {
+    text-decoration: underline;
+}
+
+.invite_mem_con {
+    width: 150px;
+    float: left;
+    margin-left: 20px;
+}
+
+.invite_mem_con input[type=button] {
+    width: 150px;
+    margin-bottom: 10px;
+    height: 30px;
+    background: darkgreen;
+    color: white;
+    border: 0.5px solid green;
+    border-radius: 5px;
+    font-size: 11pt;
+    font-weight: bold;
+}
+
+.invite_mem_con input[type=button]:HOVER {
+    cursor: pointer;
+    box-shadow: 1px 1px 5px grey;
+}
+
+
